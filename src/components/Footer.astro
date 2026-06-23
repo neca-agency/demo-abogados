@@ -1,0 +1,84 @@
+---
+import { firm } from "../data/site";
+const year = new Date().getFullYear();
+---
+
+<footer class="site-footer section--tight">
+	<div class="container site-footer__grid">
+		<div class="site-footer__brand">
+			<p class="site-footer__name">{firm.name}</p>
+			<p class="label-mono">{firm.location} · Desde {firm.founded}</p>
+		</div>
+
+		<div class="site-footer__contact">
+			<p>{firm.address}</p>
+			<p>
+				<a href={`tel:${firm.phone.replace(/\s/g, "")}`}>{firm.phone}</a>
+			</p>
+			<p>
+				<a href={`mailto:${firm.email}`}>{firm.email}</a>
+			</p>
+		</div>
+
+		<div class="site-footer__legal">
+			<p class="label-mono">Aviso legal</p>
+			<p class="site-footer__fine">
+				La información de este sitio es orientativa y no constituye asesoramiento jurídico. Los datos de contacto son
+				ficticios para fines de demostración.
+			</p>
+			<p class="site-footer__copy">© {year} {firm.name}</p>
+		</div>
+	</div>
+</footer>
+
+<style>
+	.site-footer {
+		border-top: 1px solid var(--color-border);
+		background: var(--color-surface);
+	}
+
+	.site-footer__grid {
+		display: grid;
+		gap: var(--space-xl);
+	}
+
+	.site-footer__name {
+		font-family: var(--font-display);
+		font-size: 1.25rem;
+		font-weight: 500;
+		margin-bottom: var(--space-xs);
+	}
+
+	.site-footer__contact p,
+	.site-footer__legal p {
+		color: var(--color-muted);
+		font-size: var(--text-small);
+		margin-bottom: var(--space-xs);
+	}
+
+	.site-footer__contact a {
+		color: var(--color-ink);
+		text-decoration: none;
+	}
+
+	.site-footer__contact a:hover {
+		color: var(--color-primary);
+	}
+
+	.site-footer__fine {
+		max-width: 28rem;
+		line-height: 1.55;
+	}
+
+	.site-footer__copy {
+		margin-top: var(--space-md);
+		color: var(--color-ink);
+	}
+
+	@media (min-width: 48rem) {
+		.site-footer__grid {
+			grid-template-columns: 1fr 1fr 1.2fr;
+			gap: var(--space-2xl);
+		}
+	}
+</style>

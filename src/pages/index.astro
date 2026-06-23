@@ -1,17 +1,30 @@
 ---
-
+import BaseLayout from "../layouts/BaseLayout.astro";
+import Header from "../components/Header.astro";
+import Hero from "../components/Hero.astro";
+import PracticeAreas from "../components/PracticeAreas.astro";
+import Philosophy from "../components/Philosophy.astro";
+import Team from "../components/Team.astro";
+import Credentials from "../components/Credentials.astro";
+import FAQ from "../components/FAQ.astro";
+import Contact from "../components/Contact.astro";
+import Footer from "../components/Footer.astro";
+import { firm } from "../data/site";
 ---
 
-<html lang="en">
-	<head>
-		<meta charset="utf-8" />
-		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-		<link rel="icon" href="/favicon.ico" />
-		<meta name="viewport" content="width=device-width" />
-		<meta name="generator" content={Astro.generator} />
-		<title>Astro</title>
-	</head>
-	<body>
-		<h1>Astro</h1>
-	</body>
-</html>
+<BaseLayout
+	title={`${firm.name} · Abogados en Madrid`}
+	description="Despacho boutique de abogados en Madrid. Mercantil, laboral, civil y contencioso con claridad, rigor y trato humano."
+>
+	<Header />
+	<main id="contenido-principal" class="page-main">
+		<Hero />
+		<PracticeAreas />
+		<Philosophy />
+		<Team />
+		<Credentials />
+		<FAQ />
+		<Contact />
+	</main>
+	<Footer />
+</BaseLayout>

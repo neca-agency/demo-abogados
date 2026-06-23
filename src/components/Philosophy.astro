@@ -1,0 +1,97 @@
+---
+import { philosophy } from "../data/site";
+---
+
+<section id="enfoque" class="section" aria-labelledby="enfoque-heading">
+	<div class="container philosophy">
+		<div class="philosophy__copy">
+			<h2 id="enfoque-heading">{philosophy.title}</h2>
+			<p class="philosophy__lead">{philosophy.lead}</p>
+			{
+				philosophy.body.map((paragraph) => (
+					<p class="prose philosophy__para">{paragraph}</p>
+				))
+			}
+			<blockquote class="philosophy__quote">
+				<p>{philosophy.quote}</p>
+			</blockquote>
+		</div>
+
+		<figure class="philosophy__media">
+			<img
+				src={philosophy.image.src}
+				alt={philosophy.image.alt}
+				width="1200"
+				height="900"
+				loading="lazy"
+				decoding="async"
+			/>
+		</figure>
+	</div>
+</section>
+
+<style>
+	.philosophy {
+		display: grid;
+		gap: var(--space-2xl);
+		align-items: start;
+	}
+
+	.philosophy__copy,
+	.philosophy__media {
+		min-width: 0;
+	}
+
+	.philosophy__copy {
+		display: flex;
+		flex-direction: column;
+		gap: var(--space-lg);
+	}
+
+	.philosophy__lead {
+		font-size: clamp(1.125rem, 1vw + 0.9rem, 1.3125rem);
+		color: var(--color-ink);
+		max-width: 38ch;
+		font-weight: 500;
+	}
+
+	.philosophy__para {
+		color: var(--color-muted);
+	}
+
+	.philosophy__quote {
+		margin: var(--space-md) 0 0;
+		padding: var(--space-lg) 0 0;
+		border: 0;
+		border-top: 1px solid var(--color-border);
+	}
+
+	.philosophy__quote p {
+		font-family: var(--font-display);
+		font-size: clamp(1.125rem, 1.2vw + 0.8rem, 1.375rem);
+		font-style: italic;
+		line-height: 1.45;
+		color: var(--color-ink);
+		max-width: 40ch;
+	}
+
+	.philosophy__media {
+		margin: 0;
+		border-radius: var(--radius-lg);
+		overflow: hidden;
+		aspect-ratio: 4 / 3;
+	}
+
+	.philosophy__media img {
+		width: 100%;
+		height: 100%;
+		object-fit: cover;
+	}
+
+	@media (min-width: 56rem) {
+		.philosophy {
+			grid-template-columns: 1.1fr 0.9fr;
+			gap: clamp(2rem, 6vw, 5rem);
+		}
+	}
+</style>

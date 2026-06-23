@@ -1,0 +1,109 @@
+---
+import { faq } from "../data/site";
+---
+
+<section id="preguntas" class="section section--surface" aria-labelledby="faq-heading">
+	<div class="container faq">
+		<div class="faq__intro">
+			<h2 id="faq-heading">Preguntas frecuentes</h2>
+			<p class="prose faq__lead">
+				Respuestas directas a lo que suele preguntarse antes de la primera conversación.
+			</p>
+		</div>
+
+		<div class="faq__list">
+			{
+				faq.map((item) => (
+					<details class="faq__item">
+						<summary class="faq__question">{item.question}</summary>
+						<div class="faq__answer">
+							<p>{item.answer}</p>
+						</div>
+					</details>
+				))
+			}
+		</div>
+	</div>
+</section>
+
+<style>
+	.faq {
+		display: grid;
+		gap: var(--space-2xl);
+	}
+
+	.faq__intro {
+		display: flex;
+		flex-direction: column;
+		gap: var(--space-md);
+		max-width: 32rem;
+	}
+
+	.faq__lead {
+		color: var(--color-muted);
+	}
+
+	.faq__list {
+		display: flex;
+		flex-direction: column;
+		border-top: 1px solid var(--color-border);
+	}
+
+	.faq__item {
+		border-bottom: 1px solid var(--color-border);
+	}
+
+	.faq__question {
+		display: flex;
+		align-items: center;
+		justify-content: space-between;
+		gap: var(--space-lg);
+		padding-block: var(--space-lg);
+		font-family: var(--font-body);
+		font-size: var(--text-body);
+		font-weight: 600;
+		color: var(--color-ink);
+		cursor: pointer;
+		list-style: none;
+		border-radius: var(--radius-sm);
+	}
+
+	.faq__question:focus-visible {
+		outline: 2px solid var(--color-primary);
+		outline-offset: 2px;
+	}
+
+	.faq__question::-webkit-details-marker {
+		display: none;
+	}
+
+	.faq__question::after {
+		content: "+";
+		font-family: var(--font-mono);
+		font-size: var(--text-title);
+		font-weight: 400;
+		color: var(--color-primary);
+		flex-shrink: 0;
+		transition: transform var(--duration-fast) var(--ease-out-expo);
+	}
+
+	.faq__item[open] .faq__question::after {
+		content: "−";
+	}
+
+	@media (prefers-reduced-motion: reduce) {
+		.faq__question::after {
+			transition: none;
+		}
+	}
+
+	.faq__answer {
+		padding-bottom: var(--space-lg);
+		padding-right: var(--space-2xl);
+	}
+
+	.faq__answer p {
+		color: var(--color-muted);
+		max-width: 58ch;
+	}
+</style>

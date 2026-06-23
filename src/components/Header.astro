@@ -1,0 +1,232 @@
+---
+import { firm, nav } from "../data/site";
+---
+
+<header class="site-header">
+	<div class="container site-header__inner">
+		<a class="site-header__brand" href="/">
+			<span class="site-header__name">{firm.name}</span>
+			<span class="label-mono site-header__meta">{firm.location} · Desde {firm.founded}</span>
+		</a>
+
+		<nav class="site-header__nav" aria-label="Principal">
+			<ul class="site-header__list">
+				{
+					nav.map((item) => (
+						<li>
+							<a href={item.href}>{item.label}</a>
+						</li>
+					))
+				}
+			</ul>
+		</nav>
+
+		<a class="btn btn--primary site-header__cta" href="#contacto">Contactar</a>
+
+		<details class="site-header__menu">
+			<summary class="site-header__menu-trigger" aria-label="Abrir menú de navegación">
+				<span class="site-header__menu-icon" aria-hidden="true"></span>
+			</summary>
+			<div class="site-header__menu-panel">
+				<nav aria-label="Móvil">
+					<ul class="site-header__menu-list">
+						{
+							nav.map((item) => (
+								<li>
+									<a href={item.href}>{item.label}</a>
+								</li>
+							))
+						}
+						<li>
+							<a href="#contacto">Contactar</a>
+						</li>
+					</ul>
+				</nav>
+			</div>
+		</details>
+	</div>
+</header>
+
+<script>
+	const menu = document.querySelector<HTMLDetailsElement>(".site-header__menu");
+
+	menu?.querySelectorAll("a").forEach((link) => {
+		link.addEventListener("click", () => {
+			menu.open = false;
+		});
+	});
+</script>
+
+<style>
+	.site-header {
+		position: sticky;
+		top: 0;
+		z-index: var(--z-sticky);
+		background: oklch(1 0 0 / 0.92);
+		backdrop-filter: blur(8px);
+		border-bottom: 1px solid var(--color-border);
+	}
+
+	.site-header__inner {
+		display: flex;
+		align-items: center;
+		gap: var(--space-lg);
+		min-height: 4.25rem;
+	}
+
+	.site-header__brand {
+		display: flex;
+		flex-direction: column;
+		gap: 0.15rem;
+		text-decoration: none;
+		color: var(--color-ink);
+		margin-right: auto;
+	}
+
+	.site-header__brand:hover {
+		color: var(--color-ink);
+	}
+
+	.site-header__name {
+		font-family: var(--font-display);
+		font-size: 1.125rem;
+		font-weight: 500;
+		letter-spacing: -0.02em;
+	}
+
+	.site-header__meta {
+		font-size: 0.6875rem;
+	}
+
+	.site-header__nav {
+		display: none;
+	}
+
+	.site-header__list {
+		display: flex;
+		gap: var(--space-xl);
+		list-style: none;
+		margin: 0;
+		padding: 0;
+	}
+
+	.site-header__list a {
+		font-size: var(--text-small);
+		font-weight: 500;
+		color: var(--color-ink);
+		text-decoration: none;
+	}
+
+	.site-header__list a:hover {
+		color: var(--color-primary);
+	}
+
+	.site-header__cta {
+		display: none;
+	}
+
+	.site-header__menu {
+		position: relative;
+	}
+
+	.site-header__menu-trigger {
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		width: 2.75rem;
+		height: 2.75rem;
+		list-style: none;
+		cursor: pointer;
+		border: 1px solid var(--color-border);
+		border-radius: var(--radius-sm);
+		background: var(--color-bg);
+		transition: border-color var(--duration-fast) var(--ease-out-expo);
+	}
+
+	.site-header__menu-trigger:hover {
+		border-color: var(--color-ink);
+	}
+
+	.site-header__menu-trigger:focus-visible {
+		outline: 2px solid var(--color-primary);
+		outline-offset: 3px;
+	}
+
+	.site-header__menu-trigger::-webkit-details-marker {
+		display: none;
+	}
+
+	.site-header__menu-icon,
+	.site-header__menu-icon::before,
+	.site-header__menu-icon::after {
+		display: block;
+		width: 1.125rem;
+		height: 2px;
+		background: var(--color-ink);
+		border-radius: 1px;
+		position: relative;
+	}
+
+	.site-header__menu-icon::before,
+	.site-header__menu-icon::after {
+		content: "";
+		position: absolute;
+		left: 0;
+	}
+
+	.site-header__menu-icon::before {
+		top: -6px;
+	}
+
+	.site-header__menu-icon::after {
+		top: 6px;
+	}
+
+	.site-header__menu-panel {
+		position: absolute;
+		top: calc(100% + 0.5rem);
+		right: 0;
+		min-width: 12rem;
+		padding: var(--space-md);
+		background: var(--color-bg);
+		border: 1px solid var(--color-border);
+		border-radius: var(--radius-md);
+		box-shadow: 0 4px 8px oklch(0.2 0.02 250 / 0.08);
+	}
+
+	.site-header__menu:not([open]) .site-header__menu-panel {
+		display: none;
+	}
+
+	.site-header__menu-list {
+		list-style: none;
+		margin: 0;
+		padding: 0;
+		display: flex;
+		flex-direction: column;
+		gap: var(--space-sm);
+	}
+
+	.site-header__menu-list a {
+		display: flex;
+		align-items: center;
+		min-height: 2.75rem;
+		font-weight: 500;
+		color: var(--color-ink);
+		text-decoration: none;
+	}
+
+	@media (min-width: 56rem) {
+		.site-header__nav {
+			display: block;
+		}
+
+		.site-header__cta {
+			display: inline-flex;
+		}
+
+		.site-header__menu {
+			display: none;
+		}
+	}
+</style>
