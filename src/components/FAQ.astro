@@ -2,7 +2,7 @@
 import { faq } from "../data/site";
 ---
 
-<section id="preguntas" class="section section--surface" aria-labelledby="faq-heading">
+<section id="preguntas" class="section section--surface section--below-fold" aria-labelledby="faq-heading">
 	<div class="container faq" data-faq>
 		<div class="faq__intro">
 			<h2 id="faq-heading">Preguntas frecuentes</h2>
@@ -30,10 +30,11 @@ import { faq } from "../data/site";
 
 <script>
 	import { initFaqAccordion } from "../scripts/faq-motion";
+	import { lazyInitWhenVisible } from "../scripts/lazy-init";
 
 	const faq = document.querySelector<HTMLElement>("[data-faq]");
 	if (faq) {
-		const cleanup = initFaqAccordion(faq);
+		const cleanup = lazyInitWhenVisible(faq, () => initFaqAccordion(faq));
 		document.addEventListener(
 			"astro:before-swap",
 			() => {
@@ -102,12 +103,10 @@ import { faq } from "../data/site";
 		font-weight: 400;
 		color: var(--color-primary);
 		flex-shrink: 0;
-		transition: transform var(--duration-base) var(--ease-out-expo);
 	}
 
 	.faq__item[open] .faq__question::after {
 		content: "−";
-		transform: rotate(180deg);
 	}
 
 	.faq__answer {
@@ -124,13 +123,4 @@ import { faq } from "../data/site";
 		max-width: 58ch;
 	}
 
-	@media (prefers-reduced-motion: reduce) {
-		.faq__question::after {
-			transition: none;
-		}
-
-		.faq__item[open] .faq__question::after {
-			transform: none;
-		}
-	}
 </style>

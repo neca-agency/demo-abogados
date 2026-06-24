@@ -1,23 +1,15 @@
 ---
 import { firm, hero } from "../data/site";
+import {
+	heroDesktopSrcset,
+	heroImageUrl,
+	heroMobileSrcset,
+	heroTabletSrcset,
+} from "../utils/hero-image";
 
 const metaText = `${firm.location} · Desde ${firm.founded}`;
 const headlineWords = hero.headline.split(/\s+/);
 const subheadLines = hero.subhead.split(/(?<=\.)\s+/);
-const heroImageUrl = (width: number, height: number) => {
-	const url = new URL(hero.image.src);
-	url.searchParams.set("w", String(width));
-	url.searchParams.set("h", String(height));
-	url.searchParams.set("fit", "crop");
-	return url.toString();
-};
-
-const srcsetFor = (widths: number[], aspect: number) =>
-	widths.map((w) => `${heroImageUrl(w, Math.round(w / aspect))} ${w}w`).join(", ");
-
-const mobileSrcset = srcsetFor([400, 600, 800], 5 / 4);
-const tabletSrcset = srcsetFor([640, 900, 1200], 3 / 2);
-const desktopSrcset = srcsetFor([800, 1000, 1200], 4 / 5);
 ---
 
 <section class="hero section" aria-labelledby="hero-heading" data-hero>
@@ -27,25 +19,25 @@ const desktopSrcset = srcsetFor([800, 1000, 1200], 4 / 5);
 				<picture>
 					<source
 						media="(min-width: 56rem)"
-						srcset={desktopSrcset}
+						srcset={heroDesktopSrcset}
 						sizes="42vw"
 						width="1200"
 						height="1500"
 					/>
 					<source
 						media="(min-width: 40rem)"
-						srcset={tabletSrcset}
+						srcset={heroTabletSrcset}
 						sizes="100vw"
 						width="1200"
 						height="800"
 					/>
 					<img
-						src={heroImageUrl(800, 640)}
-						srcset={mobileSrcset}
+						src={heroImageUrl(480, 384)}
+						srcset={heroMobileSrcset}
 						sizes="100vw"
 						alt={hero.image.alt}
-						width="800"
-						height="640"
+						width="480"
+						height="384"
 						fetchpriority="high"
 						decoding="async"
 					/>

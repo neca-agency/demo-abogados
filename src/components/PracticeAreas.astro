@@ -2,7 +2,7 @@
 import { practiceAreas } from "../data/site";
 ---
 
-<section id="areas" class="section section--surface" aria-labelledby="areas-heading">
+<section id="areas" class="section section--surface section--below-fold" aria-labelledby="areas-heading">
 	<div class="container areas" data-areas-accordion>
 		<header class="areas__intro">
 			<p class="label-mono areas__label">Práctica</p>
@@ -26,12 +26,11 @@ import { practiceAreas } from "../data/site";
 								<span class="areas__marker" aria-hidden="true" />
 							</summary>
 							<div class="areas__panel" data-areas-panel>
-								<div class="areas__panel-inner">
-									<div class="areas__panel-body">
-										<span class="areas__rule" aria-hidden="true" />
-										<p>{area.description}</p>
-									</div>
+							<div class="areas__panel-inner">
+								<div class="areas__panel-body">
+									<p>{area.description}</p>
 								</div>
+							</div>
 							</div>
 						</details>
 					</li>
@@ -43,6 +42,7 @@ import { practiceAreas } from "../data/site";
 
 <script>
 	import { initDetailsAccordion } from "../scripts/details-accordion";
+	import { lazyInitWhenVisible } from "../scripts/lazy-init";
 
 	const areasAccordionConfig = {
 		itemSelector: ".areas__item",
@@ -53,7 +53,7 @@ import { practiceAreas } from "../data/site";
 
 	const areas = document.querySelector<HTMLElement>("[data-areas-accordion]");
 	if (areas) {
-		const cleanup = initDetailsAccordion(areas, areasAccordionConfig);
+		const cleanup = lazyInitWhenVisible(areas, () => initDetailsAccordion(areas, areasAccordionConfig));
 		document.addEventListener(
 			"astro:before-swap",
 			() => {
@@ -176,16 +176,7 @@ import { practiceAreas } from "../data/site";
 
 	.areas__panel-body {
 		grid-column: 2;
-		display: flex;
-		align-items: stretch;
-		gap: var(--space-md);
 		min-width: 0;
-	}
-
-	.areas__rule {
-		flex-shrink: 0;
-		width: 1px;
-		background: var(--color-border);
 	}
 
 	.areas__panel-body p {

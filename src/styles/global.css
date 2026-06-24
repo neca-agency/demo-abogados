@@ -1,3 +1,9 @@
+@import "@fontsource/spectral/latin-400.css";
+@import "@fontsource/spectral/latin-500.css";
+@import "@fontsource/source-sans-3/latin-400.css";
+@import "@fontsource/source-sans-3/latin-500.css";
+@import "@fontsource/source-sans-3/latin-600.css";
+
 /* Estudio Alcántara — Swiss Brief tokens */
 
 :root {
@@ -18,6 +24,7 @@
 	--ring-error: color-mix(in oklch, var(--color-error) 12%, transparent);
 	--surface-error: color-mix(in oklch, var(--color-error) 6%, transparent);
 	--ring-on-primary: color-mix(in oklch, var(--color-on-primary) 35%, transparent);
+	--header-bg: color-mix(in oklch, var(--color-bg) 92%, transparent);
 
 	/* Typography */
 	--font-display: "Spectral", "Iowan Old Style", "Palatino Linotype", serif;
@@ -111,6 +118,13 @@ a {
 	transition: color var(--duration-fast) var(--ease-out-expo);
 }
 
+@media (prefers-reduced-motion: reduce) {
+	a,
+	.btn {
+		transition: none;
+	}
+}
+
 a:hover {
 	color: var(--color-primary-hover);
 }
@@ -187,6 +201,11 @@ p {
 
 .section--surface {
 	background: var(--color-surface);
+}
+
+.section--below-fold {
+	content-visibility: auto;
+	contain-intrinsic-size: auto 720px;
 }
 
 .rule {

@@ -2,7 +2,7 @@
 import { firm } from "../data/site";
 ---
 
-<section id="contacto" class="section" aria-labelledby="contacto-heading" data-contact>
+<section id="contacto" class="section section--below-fold" aria-labelledby="contacto-heading" data-contact>
 	<div class="container contact">
 		<div class="contact__intro">
 			<h2 id="contacto-heading">Contacto</h2>
@@ -144,10 +144,11 @@ import { firm } from "../data/site";
 
 <script>
 	import { initContactForm } from "../scripts/contact-motion";
+	import { lazyInitWhenVisible } from "../scripts/lazy-init";
 
 	const contact = document.querySelector<HTMLElement>("[data-contact]");
 	if (contact) {
-		const cleanup = initContactForm(contact);
+		const cleanup = lazyInitWhenVisible(contact, () => initContactForm(contact));
 		document.addEventListener(
 			"astro:before-swap",
 			() => {
@@ -198,7 +199,6 @@ import { firm } from "../data/site";
 		padding: var(--space-xl);
 		background: var(--color-surface);
 		border-radius: var(--radius-lg);
-		overflow: hidden;
 	}
 
 	.contact__form-wrap::before {

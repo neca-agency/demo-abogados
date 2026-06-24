@@ -1,5 +1,9 @@
 ---
 import "../styles/global.css";
+import monoStyles from "../styles/fonts-mono.css?url";
+import spectralLatin400 from "@fontsource/spectral/files/spectral-latin-400-normal.woff2?url";
+import sourceSansLatin400 from "@fontsource/source-sans-3/files/source-sans-3-latin-400-normal.woff2?url";
+import { heroLcpPreloadHref, heroMobileSrcset } from "../utils/hero-image";
 
 interface Props {
 	title: string;
@@ -18,13 +22,25 @@ const { title, description = "Despacho boutique de abogados en Madrid. Asesorami
 		<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
 		<meta name="generator" content={Astro.generator} />
 		<meta name="description" content={description} />
+		<meta property="og:type" content="website" />
+		<meta property="og:title" content={title} />
+		<meta property="og:description" content={description} />
+		<meta property="og:locale" content="es_ES" />
 		<title>{title}</title>
-		<link rel="preconnect" href="https://fonts.googleapis.com" />
-		<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+		<link rel="preconnect" href="https://images.unsplash.com" crossorigin />
 		<link
-			href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500&family=Source+Sans+3:wght@400;500;600&family=Spectral:wght@400;500;600&display=swap"
-			rel="stylesheet"
+			rel="preload"
+			as="image"
+			href={heroLcpPreloadHref}
+			imagesrcset={heroMobileSrcset}
+			imagesizes="100vw"
+			fetchpriority="high"
 		/>
+		<link rel="preload" href={spectralLatin400} as="font" type="font/woff2" crossorigin />
+		<link rel="preload" href={sourceSansLatin400} as="font" type="font/woff2" crossorigin />
+		<link rel="preload" href={monoStyles} as="style" />
+		<link rel="stylesheet" href={monoStyles} media="print" onload="this.media='all'" />
+		<noscript><link rel="stylesheet" href={monoStyles} /></noscript>
 	</head>
 	<body>
 		<a class="skip-link" href="#contenido-principal">Saltar al contenido</a>
@@ -33,19 +49,3 @@ const { title, description = "Despacho boutique de abogados en Madrid. Asesorami
 		</div>
 	</body>
 </html>
-
-<style is:global>
-	body {
-		font-family: var(--font-body);
-	}
-
-	h1,
-	h2,
-	h3 {
-		font-family: var(--font-display);
-	}
-
-	.label-mono {
-		font-family: var(--font-mono);
-	}
-</style>

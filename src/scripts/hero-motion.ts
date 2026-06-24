@@ -1,7 +1,4 @@
 import gsap from "gsap";
-import { ScrollTrigger } from "gsap/ScrollTrigger";
-
-gsap.registerPlugin(ScrollTrigger);
 
 export function initHeroMotion(root: HTMLElement): () => void {
 	if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
@@ -17,6 +14,20 @@ export function initHeroMotion(root: HTMLElement): () => void {
 	const actions = root.querySelector<HTMLElement>(".hero__actions");
 	const metaRule = root.querySelector<HTMLElement>(".hero__meta-rule");
 
+	const animatedLayers = [
+		mediaInner,
+		...wordInners,
+		...subheadLines,
+		...metaChars,
+		actions,
+	].filter(Boolean) as HTMLElement[];
+
+	const clearWillChange = () => {
+		for (const layer of animatedLayers) {
+			layer.style.willChange = "auto";
+		}
+	};
+
 	const ctx = gsap.context(() => {
 		gsap.set(wordInners, { yPercent: 110 });
 		gsap.set(subheadLines, { yPercent: 100, autoAlpha: 0 });
@@ -28,6 +39,7 @@ export function initHeroMotion(root: HTMLElement): () => void {
 		const tl = gsap.timeline({
 			defaults: { ease: "expo.out" },
 			delay: 0.08,
+			onComplete: clearWillChange,
 		});
 
 		tl.to(
@@ -87,7 +99,18 @@ export function initHeroMotion(root: HTMLElement): () => void {
 				1.05,
 			);
 
-		if (mediaInner && window.matchMedia("(min-width: 56rem)").matches) {
+		scheduleParallax(mediaInner, root);
+	}, root);
+
+	return () => ctx.revert();
+}
+
+function scheduleParallax(mediaInner: HTMLElement | null, root: HTMLElement): void {
+	if (!mediaInner || !window.matchMedia("(min-width: 56rem)").matches) return;
+
+	const initParallax = () => {
+		void import("gsap/ScrollTrigger").then(({ ScrollTrigger }) => {
+			gsap.registerPlugin(ScrollTrigger);
 			gsap.to(mediaInner, {
 				yPercent: 6,
 				ease: "none",
@@ -98,8 +121,12 @@ export function initHeroMotion(root: HTMLElement): () => void {
 					scrub: 0.6,
 				},
 			});
-		}
-	}, root);
+		});
+	};
 
-	return () => ctx.revert();
+	if ("requestIdleCallback" in window) {
+		requestIdleCallback(initParallax, { timeout: 2500 });
+	} else {
+		window.setTimeout(initParallax, 1500);
+	}
 }

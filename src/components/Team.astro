@@ -1,10 +1,17 @@
 ---
 import { team, teamSection } from "../data/site";
 
-const imageSrc = (src: string, width: number) => src.replace(/w=\d+/, `w=${width}`);
+const imageSrc = (src: string, width: number) => {
+	const url = new URL(src);
+	url.searchParams.set("w", String(width));
+	url.searchParams.set("h", String(Math.round(width * 1.25)));
+	url.searchParams.set("fit", "crop");
+	url.searchParams.set("q", "75");
+	return url.toString();
+};
 ---
 
-<section id="equipo" class="section section--surface" aria-labelledby="equipo-heading">
+<section id="equipo" class="section section--surface section--below-fold" aria-labelledby="equipo-heading">
 	<div class="container team">
 		<header class="team__header">
 			<div class="team__intro">
@@ -22,9 +29,9 @@ const imageSrc = (src: string, width: number) => src.replace(/w=\d+/, `w=${width
 			{
 				team.map((member, index) => {
 					const isLead = index === 0;
-					const maxWidth = isLead ? 960 : 800;
-					const src = imageSrc(member.image.src, maxWidth);
-					const widths = isLead ? [400, 640, 800, 960] : [320, 480, 640, 800];
+					const maxWidth = isLead ? 720 : 560;
+					const src = imageSrc(member.image.src, isLead ? 400 : 320);
+					const widths = isLead ? [224, 320, 400, 560, 720] : [196, 280, 400, 560];
 					const srcset = widths.map((w) => `${imageSrc(member.image.src, w)} ${w}w`).join(", ");
 					const sizes = isLead
 						? "(min-width: 56rem) 20rem, (min-width: 40rem) 11rem, 7.5rem"
@@ -40,7 +47,7 @@ const imageSrc = (src: string, width: number) => src.replace(/w=\d+/, `w=${width
 									alt={member.image.alt}
 									width={maxWidth}
 									height={Math.round(maxWidth * 1.25)}
-									loading={isLead ? "eager" : "lazy"}
+									loading="lazy"
 									decoding="async"
 								/>
 							</figure>
@@ -176,7 +183,7 @@ const imageSrc = (src: string, width: number) => src.replace(/w=\d+/, `w=${width
 
 	.team__specialty {
 		margin: 0;
-		font-size: 0.8125rem;
+		font-size: var(--text-label);
 		letter-spacing: 0.05em;
 		color: var(--color-primary);
 	}
