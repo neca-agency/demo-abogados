@@ -4,15 +4,13 @@ import { practiceAreas } from "../data/site";
 
 <section id="areas" class="section section--surface" aria-labelledby="areas-heading">
 	<div class="container areas">
-		<div class="areas__intro">
+		<header class="areas__intro">
 			<h2 id="areas-heading">Áreas de práctica</h2>
 			<p class="prose areas__lead">
 				Cinco disciplinas con profundidad real. Sin listados genéricos ni promesas vacías — cada área tiene un socio
 				responsable y criterio propio.
 			</p>
-		</div>
-
-		<hr class="rule" />
+		</header>
 
 		<ol class="areas__list">
 			{
@@ -43,7 +41,7 @@ import { practiceAreas } from "../data/site";
 		display: flex;
 		flex-direction: column;
 		gap: var(--space-md);
-		max-width: 36rem;
+		max-width: 32rem;
 	}
 
 	.areas__lead {
@@ -56,6 +54,7 @@ import { practiceAreas } from "../data/site";
 		padding: 0;
 		display: flex;
 		flex-direction: column;
+		border-top: 1px solid var(--color-border);
 	}
 
 	.areas__item {
@@ -67,33 +66,39 @@ import { practiceAreas } from "../data/site";
 		align-items: start;
 	}
 
-	.areas__item:first-child {
-		border-top: 1px solid var(--color-border);
-	}
-
 	.areas__index {
-		padding-top: 0.35rem;
+		padding-top: 0.2em;
+		line-height: 1;
 	}
 
 	.areas__body {
 		display: flex;
 		flex-direction: column;
 		gap: var(--space-sm);
+		min-width: 0;
 	}
 
 	.areas__body h3 {
 		font-weight: 500;
+		text-wrap: balance;
 	}
 
 	.areas__body p {
 		color: var(--color-muted);
-		max-width: 52ch;
+		font-size: var(--text-small);
+		line-height: 1.65;
+		max-width: 58ch;
 	}
 
 	@media (min-width: 48rem) {
 		.areas__item {
 			grid-template-columns: 4.5rem 1fr;
 			gap: var(--space-2xl);
+			padding-block: clamp(var(--space-xl), 3vw, var(--space-2xl));
+		}
+
+		.areas__index {
+			padding-top: 0.15em;
 		}
 	}
 </style>
