@@ -3,7 +3,7 @@ import { faq } from "../data/site";
 ---
 
 <section id="preguntas" class="section section--surface" aria-labelledby="faq-heading">
-	<div class="container faq">
+	<div class="container faq" data-faq>
 		<div class="faq__intro">
 			<h2 id="faq-heading">Preguntas frecuentes</h2>
 			<p class="prose faq__lead">
@@ -16,8 +16,10 @@ import { faq } from "../data/site";
 				faq.map((item) => (
 					<details class="faq__item">
 						<summary class="faq__question">{item.question}</summary>
-						<div class="faq__answer">
-							<p>{item.answer}</p>
+						<div class="faq__answer" data-faq-panel>
+							<div class="faq__answer-inner">
+								<p>{item.answer}</p>
+							</div>
 						</div>
 					</details>
 				))
@@ -25,6 +27,22 @@ import { faq } from "../data/site";
 		</div>
 	</div>
 </section>
+
+<script>
+	import { initFaqAccordion } from "../scripts/faq-motion";
+
+	const faq = document.querySelector<HTMLElement>("[data-faq]");
+	if (faq) {
+		const cleanup = initFaqAccordion(faq);
+		document.addEventListener(
+			"astro:before-swap",
+			() => {
+				cleanup();
+			},
+			{ once: true },
+		);
+	}
+</script>
 
 <style>
 	.faq {
@@ -84,20 +102,19 @@ import { faq } from "../data/site";
 		font-weight: 400;
 		color: var(--color-primary);
 		flex-shrink: 0;
-		transition: transform var(--duration-fast) var(--ease-out-expo);
+		transition: transform var(--duration-base) var(--ease-out-expo);
 	}
 
 	.faq__item[open] .faq__question::after {
 		content: "−";
-	}
-
-	@media (prefers-reduced-motion: reduce) {
-		.faq__question::after {
-			transition: none;
-		}
+		transform: rotate(180deg);
 	}
 
 	.faq__answer {
+		overflow: hidden;
+	}
+
+	.faq__answer-inner {
 		padding-bottom: var(--space-lg);
 		padding-right: var(--space-2xl);
 	}
@@ -105,5 +122,15 @@ import { faq } from "../data/site";
 	.faq__answer p {
 		color: var(--color-muted);
 		max-width: 58ch;
+	}
+
+	@media (prefers-reduced-motion: reduce) {
+		.faq__question::after {
+			transition: none;
+		}
+
+		.faq__item[open] .faq__question::after {
+			transform: none;
+		}
 	}
 </style>

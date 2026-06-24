@@ -4,34 +4,45 @@ import { team } from "../data/site";
 
 <section id="equipo" class="section section--surface" aria-labelledby="equipo-heading">
 	<div class="container team">
-		<div class="team__header">
+		<header class="team__intro">
 			<h2 id="equipo-heading">Equipo</h2>
 			<p class="prose team__lead">
-				Tres socios, un criterio compartido. Conocéis a quien lleva vuestro expediente desde el primer día.
+				Tres socios con responsabilidad directa sobre cada expediente.
 			</p>
-		</div>
+		</header>
 
 		<ul class="team__grid">
 			{
-				team.map((member) => (
-					<li class="team__card">
-						<figure class="team__media">
-							<img
-								src={member.image.src}
-								alt={member.image.alt}
-								width="600"
-								height="450"
-								loading="lazy"
-								decoding="async"
-							/>
-						</figure>
-						<div class="team__info">
-							<h3>{member.name}</h3>
-							<p class="team__role">{member.role}</p>
-							<p class="label-mono team__credential">{member.credential}</p>
-						</div>
-					</li>
-				))
+				team.map((member) => {
+					const roleParts = member.role.split(" · ");
+					const position = roleParts[0];
+					const specialty = roleParts.slice(1).join(" · ");
+
+					return (
+						<li class="team__member">
+							<figure class="team__media">
+								<img
+									src={member.image.src}
+									alt={member.image.alt}
+									width="600"
+									height="450"
+									loading="lazy"
+									decoding="async"
+								/>
+							</figure>
+							<div class="team__info">
+								<div class="team__identity">
+									<h3 class="team__name">{member.name}</h3>
+									<p class="team__role">
+										<span class="team__position">{position}</span>
+										{specialty ? <span class="team__specialty">{specialty}</span> : null}
+									</p>
+								</div>
+								<p class="team__credential">{member.credential}</p>
+							</div>
+						</li>
+					);
+				})
 			}
 		</ul>
 	</div>
@@ -44,7 +55,7 @@ import { team } from "../data/site";
 		gap: var(--space-2xl);
 	}
 
-	.team__header {
+	.team__intro {
 		display: flex;
 		flex-direction: column;
 		gap: var(--space-md);
@@ -64,10 +75,9 @@ import { team } from "../data/site";
 		grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
 	}
 
-	.team__card {
+	.team__member {
 		display: flex;
 		flex-direction: column;
-		gap: var(--space-lg);
 	}
 
 	.team__media {
@@ -87,16 +97,66 @@ import { team } from "../data/site";
 	.team__info {
 		display: flex;
 		flex-direction: column;
-		gap: var(--space-xs);
+		gap: var(--space-md);
+		margin-top: var(--space-lg);
+		padding-top: var(--space-lg);
+		border-top: 1px solid var(--color-border);
+	}
+
+	.team__identity {
+		display: flex;
+		flex-direction: column;
+		gap: var(--space-sm);
+		min-width: 0;
+	}
+
+	.team__name {
+		font-size: var(--text-title);
+		font-weight: 500;
+		line-height: 1.15;
+		letter-spacing: var(--tracking-display);
+		text-wrap: balance;
+		font-kerning: normal;
+		font-optical-sizing: auto;
 	}
 
 	.team__role {
-		color: var(--color-muted);
+		display: flex;
+		flex-wrap: wrap;
+		column-gap: 0.4em;
+		row-gap: 0.15em;
+		align-items: baseline;
 		font-size: var(--text-small);
+		line-height: 1.65;
+		max-width: 34ch;
+	}
+
+	.team__position {
+		font-weight: 600;
+		color: var(--color-ink);
+	}
+
+	.team__specialty {
+		color: var(--color-muted);
+	}
+
+	.team__specialty::before {
+		content: "·";
+		margin-inline-end: 0.4em;
+		color: var(--color-border);
+		font-weight: 400;
 	}
 
 	.team__credential {
-		margin-top: var(--space-xs);
-		line-height: 1.5;
+		font-family: var(--font-mono);
+		font-size: var(--text-small);
+		font-weight: 500;
+		line-height: 1.65;
+		letter-spacing: 0.01em;
+		color: var(--color-muted);
+		text-wrap: pretty;
+		max-width: 42ch;
+		font-kerning: normal;
+		font-variant-ligatures: none;
 	}
 </style>

@@ -61,18 +61,13 @@ export const practiceAreas = [
 ] as const;
 
 export const philosophy = {
+	label: "Enfoque",
 	title: "Un enfoque que prioriza la comprensión",
 	lead: "Creemos que un buen abogado no acumula jerga: traduce la complejidad para que podáis decidir con información.",
-	body: [
-		"Cada asunto comienza con una conversación honesta sobre objetivos, plazos y riesgos reales. No prometemos resultados imposibles ni presionamos con urgencias artificiales.",
-		"Nuestro trabajo es anticipar escenarios, documentar acuerdos con precisión y estar disponibles cuando las cosas se complican — con la misma calma del primer día.",
-	],
-	quote:
-		"La confianza no se declara en un eslogan: se construye cuando cada correo, cada reunión y cada documento demuestran que alguien ha leído vuestro caso con atención.",
-	image: {
-		src: "https://images.unsplash.com/photo-1497366216548-37526070297c?auto=format&fit=crop&w=1200&q=80",
-		alt: "Vestíbulo de oficina con luz natural, cristal y piedra clara",
-	},
+	commitment:
+		"Nuestro compromiso es convertir lo complejo en claro, para que cada decisión legal sea informada y confiada.",
+	detail:
+		"Cada asunto comienza con una conversación honesta sobre objetivos, plazos y riesgos reales. Escuchamos con atención, analizamos cada detalle y comunicamos de forma directa para que siempre sepáis qué implica y qué podéis esperar.",
 } as const;
 
 export const team = [

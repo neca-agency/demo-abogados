@@ -1,32 +1,27 @@
 ---
 import { philosophy } from "../data/site";
+import QuoteAltLeft from "./icons/QuoteAltLeft.astro";
 ---
 
 <section id="enfoque" class="section" aria-labelledby="enfoque-heading">
 	<div class="container philosophy">
-		<div class="philosophy__copy">
+		<div class="philosophy__intro">
+			<p class="label-mono philosophy__label">{philosophy.label}</p>
+			<hr class="philosophy__rule" />
 			<h2 id="enfoque-heading">{philosophy.title}</h2>
 			<p class="philosophy__lead">{philosophy.lead}</p>
-			{
-				philosophy.body.map((paragraph) => (
-					<p class="prose philosophy__para">{paragraph}</p>
-				))
-			}
-			<blockquote class="philosophy__quote">
-				<p>{philosophy.quote}</p>
-			</blockquote>
 		</div>
 
-		<figure class="philosophy__media">
-			<img
-				src={philosophy.image.src}
-				alt={philosophy.image.alt}
-				width="1200"
-				height="900"
-				loading="lazy"
-				decoding="async"
-			/>
-		</figure>
+		<aside class="philosophy__commitment" aria-label="Compromiso del estudio">
+			<span class="philosophy__mark" aria-hidden="true">
+				<QuoteAltLeft class="philosophy__mark-svg" />
+			</span>
+			<blockquote class="philosophy__statement">
+				<p>{philosophy.commitment}</p>
+			</blockquote>
+			<hr class="philosophy__rule" />
+			<p class="philosophy__detail">{philosophy.detail}</p>
+		</aside>
 	</div>
 </section>
 
@@ -37,61 +32,97 @@ import { philosophy } from "../data/site";
 		align-items: start;
 	}
 
-	.philosophy__copy,
-	.philosophy__media {
+	.philosophy__intro,
+	.philosophy__commitment {
 		min-width: 0;
 	}
 
-	.philosophy__copy {
+	.philosophy__intro {
 		display: flex;
 		flex-direction: column;
 		gap: var(--space-lg);
+		max-width: 34rem;
+	}
+
+	.philosophy__label {
+		margin: 0;
+	}
+
+	.philosophy__rule {
+		width: 2.75rem;
+		border: 0;
+		border-top: 1px solid var(--color-accent-soft);
+		margin: 0;
 	}
 
 	.philosophy__lead {
-		font-size: clamp(1.125rem, 1vw + 0.9rem, 1.3125rem);
+		font-size: clamp(1.0625rem, 0.6vw + 0.95rem, 1.1875rem);
+		line-height: 1.55;
 		color: var(--color-ink);
 		max-width: 38ch;
-		font-weight: 500;
 	}
 
-	.philosophy__para {
-		color: var(--color-muted);
+	.philosophy__commitment {
+		display: flex;
+		flex-direction: column;
+		gap: var(--space-lg);
+		padding-top: var(--space-xs);
 	}
 
-	.philosophy__quote {
-		margin: var(--space-md) 0 0;
-		padding: var(--space-lg) 0 0;
-		border: 0;
-		border-top: 1px solid var(--color-border);
+	.philosophy__mark {
+		display: block;
+		width: clamp(3.5rem, 4.5vw + 1.75rem, 5.25rem);
+		color: var(--color-accent-soft);
+		line-height: 0;
+		user-select: none;
 	}
 
-	.philosophy__quote p {
-		font-family: var(--font-display);
-		font-size: clamp(1.125rem, 1.2vw + 0.8rem, 1.375rem);
-		font-style: italic;
-		line-height: 1.45;
-		color: var(--color-ink);
-		max-width: 40ch;
-	}
-
-	.philosophy__media {
-		margin: 0;
-		border-radius: var(--radius-lg);
-		overflow: hidden;
-		aspect-ratio: 4 / 3;
-	}
-
-	.philosophy__media img {
+	.philosophy__mark-svg {
+		display: block;
 		width: 100%;
-		height: 100%;
-		object-fit: cover;
+		height: auto;
+	}
+
+	.philosophy__statement {
+		margin: 0;
+		padding: 0;
+		border: 0;
+	}
+
+	.philosophy__statement p {
+		font-family: var(--font-display);
+		font-size: clamp(1.375rem, 1.4vw + 0.9rem, 1.875rem);
+		font-style: italic;
+		font-weight: 400;
+		line-height: 1.35;
+		letter-spacing: -0.02em;
+		color: var(--color-ink);
+		text-wrap: balance;
+		max-width: 28ch;
+	}
+
+	.philosophy__detail {
+		font-size: clamp(1.0625rem, 0.6vw + 0.95rem, 1.1875rem);
+		line-height: 1.6;
+		color: var(--color-muted);
+		max-width: 42ch;
+		text-wrap: pretty;
 	}
 
 	@media (min-width: 56rem) {
 		.philosophy {
-			grid-template-columns: 1.1fr 0.9fr;
-			gap: clamp(2rem, 6vw, 5rem);
+			grid-template-columns: minmax(0, 0.95fr) minmax(0, 1.05fr);
+			gap: clamp(2.5rem, 8vw, 6.5rem);
+		}
+
+		.philosophy__commitment {
+			padding-top: var(--space-md);
+		}
+	}
+
+	@media (min-width: 72rem) {
+		.philosophy__intro {
+			padding-right: clamp(1rem, 4vw, 3rem);
 		}
 	}
 </style>

@@ -2,7 +2,7 @@
 import { firm } from "../data/site";
 ---
 
-<section id="contacto" class="section" aria-labelledby="contacto-heading">
+<section id="contacto" class="section" aria-labelledby="contacto-heading" data-contact>
 	<div class="container contact">
 		<div class="contact__intro">
 			<h2 id="contacto-heading">Contacto</h2>
@@ -21,64 +21,141 @@ import { firm } from "../data/site";
 			</address>
 		</div>
 
-		<form
-			class="contact__form"
-			method="post"
-			action="#"
-			novalidate
-			data-contact-form
-			aria-describedby="form-status"
-		>
-			<div class="contact__field">
-				<label for="nombre">Nombre</label>
-				<input id="nombre" name="nombre" type="text" autocomplete="name" required />
+		<div class="contact__form-wrap" data-contact-form-wrap>
+			<p class="label-mono contact__form-note">
+				Ref. consulta · respuesta &lt; 24 h laborables
+			</p>
+
+			<div class="contact__stage" data-contact-stage>
+				<form
+					class="contact__form"
+					method="post"
+					action="#"
+					novalidate
+					data-contact-form
+					aria-describedby="form-status"
+				>
+				<div class="contact__field" data-contact-field>
+					<label for="nombre">Nombre</label>
+					<input
+						id="nombre"
+						name="nombre"
+						type="text"
+						autocomplete="name"
+						placeholder="Cómo preferís que os llamemos"
+						required
+					/>
+				</div>
+
+				<div class="contact__field" data-contact-field>
+					<label for="email">Correo electrónico</label>
+					<input
+						id="email"
+						name="email"
+						type="email"
+						autocomplete="email"
+						placeholder="donde@respondemos.es"
+						required
+					/>
+				</div>
+
+				<div class="contact__field" data-contact-field>
+					<label for="asunto">Asunto</label>
+					<input
+						id="asunto"
+						name="asunto"
+						type="text"
+						placeholder="Mercantil, laboral, familia…"
+						required
+					/>
+				</div>
+
+				<div class="contact__field" data-contact-field>
+					<label for="mensaje">Mensaje</label>
+					<textarea
+						id="mensaje"
+						name="mensaje"
+						rows="4"
+						placeholder="Contadnos el contexto. No hace falta que sea perfecto."
+						required></textarea>
+				</div>
+
+				<p id="form-status" class="contact__status" role="status" aria-live="polite" hidden data-form-status></p>
+
+				<div class="contact__submit-row">
+					<button class="btn btn--primary contact__submit" type="submit" data-contact-submit>
+						<span class="contact__submit-stack">
+							<span class="contact__submit-label" data-submit-label>Enviar mensaje</span>
+							<span class="contact__submit-loading" data-submit-loading aria-hidden="true">
+								<span class="contact__spinner"></span>
+								Recibiendo vuestro mensaje…
+							</span>
+						</span>
+					</button>
+				</div>
+			</form>
+
+			<div
+				class="contact__success"
+				hidden
+				data-contact-success
+				aria-hidden="true"
+				role="region"
+				aria-labelledby="contact-success-heading"
+			>
+				<svg
+					class="contact__check"
+					width="48"
+					height="48"
+					viewBox="0 0 48 48"
+					aria-hidden="true"
+					focusable="false"
+				>
+					<circle class="contact__check-ring" cx="24" cy="24" r="22" />
+					<path
+						class="contact__check-path"
+						d="M14 24.5 L21 31.5 L34 17"
+						fill="none"
+						stroke-width="2.5"
+						stroke-linecap="round"
+						stroke-linejoin="round"></path>
+				</svg>
+
+				<div class="contact__success-copy" data-success-copy>
+					<h3 id="contact-success-heading" class="contact__success-title" tabindex="-1">
+						Mensaje recibido
+					</h3>
+					<p class="contact__success-lead">
+						Lo revisará un socio del estudio. Os responderemos en un plazo máximo de veinticuatro horas laborables.
+					</p>
+					<p class="contact__success-aside">
+						Si el asunto es urgente, llamadnos al{" "}
+						<a href={`tel:${firm.phone.replace(/\s/g, "")}`}>{firm.phone}</a>.
+					</p>
+					<button type="button" class="btn btn--ghost contact__reset" data-contact-reset>
+						Enviar otro mensaje
+					</button>
+				</div>
 			</div>
-
-			<div class="contact__field">
-				<label for="email">Correo electrónico</label>
-				<input id="email" name="email" type="email" autocomplete="email" required />
 			</div>
-
-			<div class="contact__field">
-				<label for="asunto">Asunto</label>
-				<input id="asunto" name="asunto" type="text" required />
-			</div>
-
-			<div class="contact__field">
-				<label for="mensaje">Mensaje</label>
-				<textarea id="mensaje" name="mensaje" rows="5" required></textarea>
-			</div>
-
-			<p id="form-status" class="contact__status" role="status" aria-live="polite" hidden data-form-status></p>
-
-			<button class="btn btn--primary" type="submit">Enviar mensaje</button>
-		</form>
+		</div>
 	</div>
 </section>
 
 <script>
-	const form = document.querySelector<HTMLFormElement>("[data-contact-form]");
-	const status = document.querySelector<HTMLElement>("[data-form-status]");
+	import { initContactForm } from "../scripts/contact-motion";
 
-	form?.addEventListener("submit", (event) => {
-		event.preventDefault();
-
-		if (!form || !status) return;
-
-		if (!form.checkValidity()) {
-			status.hidden = false;
-			status.textContent = "Revisad los campos marcados antes de enviar.";
-			status.dataset.state = "error";
-			form.reportValidity();
-			return;
-		}
-
-		status.hidden = false;
-		status.textContent =
-			"Gracias por vuestro mensaje. En un entorno real, lo recibiríamos en las próximas horas laborables.";
-		status.dataset.state = "success";
-		form.reset();
-	});
+	const contact = document.querySelector<HTMLElement>("[data-contact]");
+	if (contact) {
+		const cleanup = initContactForm(contact);
+		document.addEventListener(
+			"astro:before-swap",
+			() => {
+				cleanup();
+			},
+			{ once: true },
+		);
+	}
 </script>
 
 <style>
@@ -116,24 +193,73 @@ import { firm } from "../data/site";
 		color: var(--color-primary);
 	}
 
+	.contact__form-wrap {
+		position: relative;
+		padding: var(--space-xl);
+		background: var(--color-surface);
+		border-radius: var(--radius-lg);
+		overflow: hidden;
+	}
+
+	.contact__form-wrap::before {
+		content: "";
+		position: absolute;
+		inset: 0 0 auto;
+		height: 2px;
+		background: var(--color-primary);
+		transform: scaleX(0);
+		transform-origin: left center;
+		transition: transform var(--duration-base) var(--ease-out-expo);
+	}
+
+	.contact__form-wrap:focus-within::before {
+		transform: scaleX(1);
+	}
+
+	.contact__form-note {
+		margin-bottom: var(--space-lg);
+	}
+
+	.contact__stage {
+		position: relative;
+	}
+
+	.contact__stage--locked {
+		overflow: hidden;
+	}
+
 	.contact__form {
 		display: flex;
 		flex-direction: column;
 		gap: var(--space-lg);
-		padding: var(--space-xl);
-		background: var(--color-surface);
-		border-radius: var(--radius-lg);
+	}
+
+	.contact__form[hidden] {
+		display: none !important;
+	}
+
+	.contact__form--leaving {
+		position: absolute;
+		inset: 0;
+		width: 100%;
+		pointer-events: none;
 	}
 
 	.contact__field {
 		display: flex;
 		flex-direction: column;
 		gap: var(--space-xs);
+		position: relative;
 	}
 
 	.contact__field label {
 		font-size: var(--text-small);
 		font-weight: 600;
+		transition: color var(--duration-fast) var(--ease-out-expo);
+	}
+
+	.contact__field:focus-within label {
+		color: var(--color-primary);
 	}
 
 	.contact__field input,
@@ -145,7 +271,10 @@ import { firm } from "../data/site";
 		border: 1px solid var(--color-border);
 		border-radius: var(--radius-sm);
 		padding: 0.75rem 0.875rem;
-		transition: border-color var(--duration-fast) var(--ease-out-expo);
+		transition:
+			border-color var(--duration-fast) var(--ease-out-expo),
+			box-shadow var(--duration-fast) var(--ease-out-expo),
+			background-color var(--duration-fast) var(--ease-out-expo);
 	}
 
 	.contact__field input::placeholder,
@@ -160,30 +289,261 @@ import { firm } from "../data/site";
 		box-shadow: 0 0 0 3px var(--ring-primary);
 	}
 
-	.contact__field input:user-invalid:not(:placeholder-shown),
-	.contact__field textarea:user-invalid:not(:placeholder-shown) {
+	.contact__field[data-touched]:not([data-valid]) input:user-invalid,
+	.contact__field[data-touched]:not([data-valid]) textarea:user-invalid {
 		border-color: var(--color-error);
+		box-shadow: 0 0 0 3px var(--ring-error);
+	}
+
+	.contact__field[data-valid] input,
+	.contact__field[data-valid] textarea {
+		padding-inline-end: 2.25rem;
+	}
+
+	.contact__field[data-valid]:has(input)::after {
+		content: "";
+		position: absolute;
+		right: 0.75rem;
+		bottom: 0.95rem;
+		width: 0.45rem;
+		height: 0.75rem;
+		border: solid var(--color-primary);
+		border-width: 0 2px 2px 0;
+		transform: rotate(45deg);
+		opacity: 0;
+		animation: contact-valid-mark var(--duration-base) var(--ease-out-expo) forwards;
+	}
+
+	@keyframes contact-valid-mark {
+		from {
+			opacity: 0;
+			transform: rotate(45deg) scale(0.6);
+		}
+
+		to {
+			opacity: 1;
+			transform: rotate(45deg) scale(1);
+		}
 	}
 
 	.contact__field textarea {
-		resize: vertical;
-		min-height: 7rem;
+		resize: none;
+		min-height: 6.5rem;
+		overflow: hidden;
+		line-height: var(--leading-body);
+	}
+
+	.contact__status {
+		font-size: var(--text-small);
+	}
+
+	.contact__status:not([hidden]) {
+		position: absolute;
+		width: 1px;
+		height: 1px;
+		padding: 0;
+		margin: -1px;
+		overflow: hidden;
+		clip: rect(0, 0, 0, 0);
+		white-space: nowrap;
+		border: 0;
 	}
 
 	.contact__status[data-state="error"] {
+		position: static;
+		width: auto;
+		height: auto;
+		margin: 0;
+		overflow: visible;
+		clip: auto;
+		white-space: normal;
 		color: var(--color-error);
 		font-size: var(--text-small);
+		padding: var(--space-sm) var(--space-md);
+		background: var(--surface-error);
+		border-radius: var(--radius-sm);
 	}
 
-	.contact__status[data-state="success"] {
-		color: var(--color-ink);
+	.contact__submit-row {
+		display: flex;
+		justify-content: flex-end;
+		padding-top: var(--space-xs);
+	}
+
+	.contact__submit {
+		min-width: min(100%, 11.5rem);
+	}
+
+	.contact__submit[data-loading] {
+		min-width: min(100%, 15.5rem);
+	}
+
+	.contact__submit-stack {
+		display: grid;
+		grid-template-areas: "stack";
+		align-items: center;
+		justify-items: center;
+	}
+
+	.contact__submit-label,
+	.contact__submit-loading {
+		grid-area: stack;
+		display: inline-flex;
+		align-items: center;
+		justify-content: center;
+		gap: var(--space-sm);
+		transition: opacity var(--duration-fast) var(--ease-out-expo);
+	}
+
+	.contact__submit-loading {
 		font-size: var(--text-small);
+		font-weight: 600;
+		white-space: nowrap;
+		opacity: 0;
+	}
+
+	.contact__submit[data-loading] .contact__submit-label {
+		opacity: 0;
+	}
+
+	.contact__submit[data-loading] .contact__submit-loading {
+		opacity: 1;
+	}
+
+	.contact__spinner {
+		width: 0.875rem;
+		height: 0.875rem;
+		border: 2px solid var(--ring-on-primary);
+		border-top-color: var(--color-on-primary);
+		border-radius: 50%;
+		animation: contact-spin 0.7s linear infinite;
+	}
+
+	@keyframes contact-spin {
+		to {
+			transform: rotate(360deg);
+		}
+	}
+
+	.contact__success {
+		display: flex;
+		flex-direction: column;
+		align-items: flex-start;
+		gap: var(--space-lg);
+		padding-block: var(--space-sm);
+	}
+
+	.contact__success[hidden] {
+		display: none !important;
+	}
+
+	.contact__success--overlay {
+		position: absolute;
+		inset: 0;
+		z-index: 1;
+	}
+
+	.contact__form-wrap--success::before {
+		transform: scaleX(1);
+	}
+
+	.contact__check-ring {
+		fill: none;
+		stroke: var(--color-border);
+		stroke-width: 1.5;
+	}
+
+	.contact__check-path {
+		stroke: var(--color-primary);
+	}
+
+	.contact__success-copy {
+		display: flex;
+		flex-direction: column;
+		gap: var(--space-sm);
+	}
+
+	.contact__success-title {
+		font-family: var(--font-display);
+		font-size: var(--text-title);
+		font-weight: 500;
+		line-height: var(--leading-tight);
+		letter-spacing: var(--tracking-display);
+	}
+
+	.contact__success-title:focus {
+		outline: none;
+	}
+
+	.contact__success-title:focus-visible {
+		outline: 2px solid var(--color-primary);
+		outline-offset: 3px;
+	}
+
+	.contact__success-lead {
+		color: var(--color-ink);
+		max-width: 36ch;
+		text-wrap: pretty;
+	}
+
+	.contact__success-aside {
+		font-size: var(--text-small);
+		color: var(--color-muted);
+		max-width: 38ch;
+		text-wrap: pretty;
+	}
+
+	.contact__success-aside a {
+		color: var(--color-ink);
+		font-weight: 600;
+		text-decoration: none;
+	}
+
+	.contact__success-aside a:hover {
+		color: var(--color-primary);
+	}
+
+	.contact__reset {
+		margin-top: var(--space-md);
+	}
+
+	@media (max-width: 35.99rem) {
+		.contact__submit-row {
+			justify-content: stretch;
+		}
+
+		.contact__submit {
+			width: 100%;
+		}
 	}
 
 	@media (min-width: 56rem) {
 		.contact {
 			grid-template-columns: 1fr 1.1fr;
 			gap: clamp(2rem, 6vw, 5rem);
+		}
+	}
+
+	@media (prefers-reduced-motion: reduce) {
+		.contact__form-wrap::before {
+			transition: none;
+			transform: scaleX(1);
+		}
+
+		.contact__field[data-valid]:has(input)::after {
+			animation: none;
+			opacity: 1;
+		}
+
+		.contact__spinner {
+			animation: none;
+			border-top-color: var(--color-on-primary);
+			opacity: 0.7;
+		}
+
+		.contact__submit-label,
+		.contact__submit-loading {
+			transition: none;
 		}
 	}
 </style>
