@@ -1,0 +1,241 @@
+{
+  "schemaVersion": 2,
+  "generatedAt": "2026-06-23T21:30:00.000Z",
+  "title": "Design System: Estudio Alcántara",
+  "extensions": {
+    "colorMeta": {
+      "institutional-slate": {
+        "role": "primary",
+        "displayName": "Institutional Slate",
+        "canonical": "oklch(0.44 0.09 252)",
+        "tonalRamp": [
+          "oklch(0.18 0.06 252)",
+          "oklch(0.25 0.07 252)",
+          "oklch(0.32 0.08 252)",
+          "oklch(0.38 0.1 252)",
+          "oklch(0.44 0.09 252)",
+          "oklch(0.55 0.07 252)",
+          "oklch(0.68 0.05 252)",
+          "oklch(0.82 0.03 252)"
+        ]
+      },
+      "pure-paper": {
+        "role": "neutral",
+        "displayName": "Pure Paper",
+        "canonical": "oklch(1 0 0)",
+        "tonalRamp": [
+          "oklch(0.2 0.025 250)",
+          "oklch(0.35 0.022 250)",
+          "oklch(0.46 0.022 250)",
+          "oklch(0.65 0.015 250)",
+          "oklch(0.78 0.012 250)",
+          "oklch(0.88 0.012 250)",
+          "oklch(0.965 0.008 250)",
+          "oklch(1 0 0)"
+        ]
+      },
+      "brief-ink": {
+        "role": "neutral",
+        "displayName": "Brief Ink",
+        "canonical": "oklch(0.2 0.025 250)",
+        "tonalRamp": [
+          "oklch(0.12 0.02 250)",
+          "oklch(0.16 0.022 250)",
+          "oklch(0.2 0.025 250)",
+          "oklch(0.28 0.024 250)",
+          "oklch(0.38 0.023 250)",
+          "oklch(0.46 0.022 250)",
+          "oklch(0.58 0.018 250)",
+          "oklch(0.72 0.012 250)"
+        ]
+      },
+      "cool-mist-surface": {
+        "role": "neutral",
+        "displayName": "Cool Mist Surface",
+        "canonical": "oklch(0.965 0.008 250)",
+        "tonalRamp": [
+          "oklch(0.2 0.025 250)",
+          "oklch(0.35 0.022 250)",
+          "oklch(0.46 0.022 250)",
+          "oklch(0.65 0.015 250)",
+          "oklch(0.78 0.012 250)",
+          "oklch(0.88 0.012 250)",
+          "oklch(0.93 0.01 250)",
+          "oklch(0.965 0.008 250)"
+        ]
+      }
+    },
+    "typographyMeta": {
+      "display": {
+        "displayName": "Display",
+        "purpose": "Hero h1 only. Spectral at clamp(2.5rem, 5vw + 1rem, 4.5rem)."
+      },
+      "headline": {
+        "displayName": "Headline",
+        "purpose": "Section titles — Áreas, Equipo, Contacto."
+      },
+      "body": {
+        "displayName": "Body",
+        "purpose": "Prose, UI labels, form fields. Source Sans 3 at 1.0625rem, max 42rem measure."
+      },
+      "label": {
+        "displayName": "Label",
+        "purpose": "Mono metadata, practice index numbers, attributions. Uppercase, 0.04em tracking."
+      }
+    },
+    "shadows": [
+      {
+        "name": "dropdown-panel",
+        "value": "0 4px 8px oklch(0.2 0.02 250 / 0.08)",
+        "purpose": "Mobile navigation menu panel only — functional overlay, not card decoration."
+      }
+    ],
+    "motion": [
+      {
+        "name": "ease-out-expo",
+        "value": "cubic-bezier(0.16, 1, 0.3, 1)",
+        "purpose": "Default easing for color, border, and hero entrance transitions."
+      },
+      {
+        "name": "duration-fast",
+        "value": "150ms",
+        "purpose": "Hover and focus state transitions on links, buttons, inputs."
+      },
+      {
+        "name": "duration-slow",
+        "value": "600ms",
+        "purpose": "Hero entrance fade — disabled under prefers-reduced-motion."
+      }
+    ],
+    "breakpoints": [
+      { "name": "md", "value": "48rem" },
+      { "name": "lg", "value": "56rem" }
+    ]
+  },
+  "components": [
+    {
+      "name": "Primary Button",
+      "kind": "button",
+      "refersTo": "button-primary",
+      "description": "Main call to action — header, hero, form submit. One per viewport zone.",
+      "html": "<button class=\"ds-btn-primary\">Solicitar primera conversación</button>",
+      "css": ".ds-btn-primary { display: inline-flex; align-items: center; justify-content: center; min-height: 2.75rem; padding: 0.625rem 1.375rem; font-family: var(--font-body, 'Source Sans 3', system-ui, sans-serif); font-size: 0.875rem; font-weight: 600; line-height: 1; color: var(--color-on-primary, oklch(0.99 0.005 250)); background: var(--color-primary, oklch(0.44 0.09 252)); border: 1px solid var(--color-primary, oklch(0.44 0.09 252)); border-radius: 4px; cursor: pointer; transition: background-color 150ms cubic-bezier(0.16, 1, 0.3, 1), border-color 150ms cubic-bezier(0.16, 1, 0.3, 1); } .ds-btn-primary:hover { background: var(--color-primary-hover, oklch(0.38 0.1 252)); border-color: var(--color-primary-hover, oklch(0.38 0.1 252)); } .ds-btn-primary:focus-visible { outline: 2px solid var(--color-primary, oklch(0.44 0.09 252)); outline-offset: 3px; }"
+    },
+    {
+      "name": "Ghost Button",
+      "kind": "button",
+      "refersTo": "button-ghost",
+      "description": "Secondary outlined action when a filled primary is already present.",
+      "html": "<button class=\"ds-btn-ghost\">Ver áreas</button>",
+      "css": ".ds-btn-ghost { display: inline-flex; align-items: center; justify-content: center; min-height: 2.75rem; padding: 0.625rem 1.375rem; font-family: var(--font-body, 'Source Sans 3', system-ui, sans-serif); font-size: 0.875rem; font-weight: 600; line-height: 1; color: var(--color-ink, oklch(0.2 0.025 250)); background: transparent; border: 1px solid var(--color-border, oklch(0.88 0.012 250)); border-radius: 4px; cursor: pointer; transition: border-color 150ms cubic-bezier(0.16, 1, 0.3, 1), color 150ms cubic-bezier(0.16, 1, 0.3, 1); } .ds-btn-ghost:hover { border-color: var(--color-ink, oklch(0.2 0.025 250)); } .ds-btn-ghost:focus-visible { outline: 2px solid var(--color-primary, oklch(0.44 0.09 252)); outline-offset: 3px; }"
+    },
+    {
+      "name": "Text Input",
+      "kind": "input",
+      "refersTo": "input-field",
+      "description": "Contact form text field — stroke border, tonal focus ring.",
+      "html": "<label class=\"ds-field\"><span class=\"ds-field-label\">Nombre</span><input class=\"ds-input\" type=\"text\" placeholder=\"\" /></label>",
+      "css": ".ds-field { display: flex; flex-direction: column; gap: 0.5rem; } .ds-field-label { font-family: var(--font-body, 'Source Sans 3', system-ui, sans-serif); font-size: 0.875rem; font-weight: 600; color: var(--color-ink, oklch(0.2 0.025 250)); } .ds-input { font-family: var(--font-body, 'Source Sans 3', system-ui, sans-serif); font-size: 1.0625rem; color: var(--color-ink, oklch(0.2 0.025 250)); background: var(--color-bg, oklch(1 0 0)); border: 1px solid var(--color-border, oklch(0.88 0.012 250)); border-radius: 4px; padding: 0.75rem 0.875rem; transition: border-color 150ms cubic-bezier(0.16, 1, 0.3, 1); } .ds-input:focus { outline: none; border-color: var(--color-primary, oklch(0.44 0.09 252)); box-shadow: 0 0 0 3px oklch(0.44 0.09 252 / 0.15); } .ds-input::placeholder { color: var(--color-muted, oklch(0.46 0.022 250)); }"
+    },
+    {
+      "name": "Site Navigation",
+      "kind": "nav",
+      "refersTo": "button-primary",
+      "description": "Sticky header with brand, inline links, and primary CTA.",
+      "html": "<header class=\"ds-nav\"><a class=\"ds-nav-brand\" href=\"#\"><span class=\"ds-nav-name\">Estudio Alcántara</span><span class=\"ds-nav-meta\">Madrid · Desde 1987</span></a><nav class=\"ds-nav-links\"><a href=\"#areas\">Áreas</a><a href=\"#enfoque\">Enfoque</a><a href=\"#equipo\">Equipo</a></nav><a class=\"ds-btn-primary ds-nav-cta\" href=\"#contacto\">Contactar</a></header>",
+      "css": ".ds-nav { display: flex; align-items: center; gap: 1.5rem; min-height: 4.25rem; padding: 0 1.5rem; background: oklch(1 0 0 / 0.92); border-bottom: 1px solid var(--color-border, oklch(0.88 0.012 250)); } .ds-nav-brand { display: flex; flex-direction: column; gap: 0.15rem; text-decoration: none; color: var(--color-ink, oklch(0.2 0.025 250)); margin-right: auto; } .ds-nav-name { font-family: var(--font-display, Spectral, serif); font-size: 1.125rem; font-weight: 500; letter-spacing: -0.02em; } .ds-nav-meta { font-family: var(--font-mono, 'JetBrains Mono', monospace); font-size: 0.6875rem; font-weight: 500; letter-spacing: 0.04em; text-transform: uppercase; color: var(--color-muted, oklch(0.46 0.022 250)); } .ds-nav-links { display: flex; gap: 2.5rem; } .ds-nav-links a { font-size: 0.875rem; font-weight: 500; color: var(--color-ink, oklch(0.2 0.025 250)); text-decoration: none; transition: color 150ms cubic-bezier(0.16, 1, 0.3, 1); } .ds-nav-links a:hover { color: var(--color-primary, oklch(0.44 0.09 252)); } .ds-nav-cta { text-decoration: none; }"
+    },
+    {
+      "name": "Practice Index Row",
+      "kind": "custom",
+      "description": "Signature typographic list — mono index, ruled dividers, no icon cards.",
+      "html": "<div class=\"ds-practice-row\"><span class=\"ds-practice-index\">01</span><div class=\"ds-practice-body\"><h3 class=\"ds-practice-title\">Derecho mercantil</h3><p class=\"ds-practice-desc\">Constitución de sociedades, pactos entre socios, operaciones corporativas.</p></div></div>",
+      "css": ".ds-practice-row { display: grid; grid-template-columns: 3rem 1fr; gap: 1.5rem; padding: 2.5rem 0; border-bottom: 1px solid var(--color-border, oklch(0.88 0.012 250)); align-items: start; } .ds-practice-index { font-family: var(--font-mono, 'JetBrains Mono', monospace); font-size: 0.75rem; font-weight: 500; letter-spacing: 0.04em; text-transform: uppercase; color: var(--color-muted, oklch(0.46 0.022 250)); padding-top: 0.35rem; } .ds-practice-title { font-family: var(--font-display, Spectral, serif); font-size: clamp(1.125rem, 1vw + 0.75rem, 1.375rem); font-weight: 500; line-height: 1.12; letter-spacing: -0.03em; color: var(--color-ink, oklch(0.2 0.025 250)); margin: 0 0 0.75rem; } .ds-practice-desc { font-family: var(--font-body, 'Source Sans 3', system-ui, sans-serif); font-size: 1.0625rem; line-height: 1.6; color: var(--color-muted, oklch(0.46 0.022 250)); margin: 0; max-width: 52ch; }"
+    },
+    {
+      "name": "FAQ Accordion Item",
+      "kind": "custom",
+      "description": "Native details/summary accordion with mono expand marker.",
+      "html": "<details class=\"ds-faq\"><summary class=\"ds-faq-q\">¿Cómo es la primera reunión?</summary><div class=\"ds-faq-a\"><p>Dura entre cuarenta y sesenta minutos. Sin compromiso de contratación.</p></div></details>",
+      "css": ".ds-faq { border-bottom: 1px solid var(--color-border, oklch(0.88 0.012 250)); } .ds-faq-q { display: flex; align-items: center; justify-content: space-between; gap: 1.5rem; padding: 1.5rem 0; font-family: var(--font-body, 'Source Sans 3', system-ui, sans-serif); font-size: 1.0625rem; font-weight: 600; color: var(--color-ink, oklch(0.2 0.025 250)); cursor: pointer; list-style: none; } .ds-faq-q::-webkit-details-marker { display: none; } .ds-faq-q::after { content: '+'; font-family: var(--font-mono, 'JetBrains Mono', monospace); font-size: 1.375rem; font-weight: 400; color: var(--color-primary, oklch(0.44 0.09 252)); flex-shrink: 0; } .ds-faq[open] .ds-faq-q::after { content: '−'; } .ds-faq-a { padding-bottom: 1.5rem; } .ds-faq-a p { font-family: var(--font-body, 'Source Sans 3', system-ui, sans-serif); font-size: 1.0625rem; line-height: 1.6; color: var(--color-muted, oklch(0.46 0.022 250)); margin: 0; max-width: 58ch; }"
+    },
+    {
+      "name": "Contact Form Panel",
+      "kind": "card",
+      "description": "Tonal surface container for contact fields — no border, no shadow.",
+      "html": "<div class=\"ds-contact-panel\"><label class=\"ds-field\"><span class=\"ds-field-label\">Correo electrónico</span><input class=\"ds-input\" type=\"email\" /></label><button class=\"ds-btn-primary\">Enviar mensaje</button></div>",
+      "css": ".ds-contact-panel { display: flex; flex-direction: column; gap: 1.5rem; padding: 2.5rem; background: var(--color-surface, oklch(0.965 0.008 250)); border-radius: 12px; }"
+    },
+    {
+      "name": "Mono Label",
+      "kind": "chip",
+      "description": "Firm metadata and section indices — uppercase mono with tracking.",
+      "html": "<span class=\"ds-label\">Madrid · Desde 1987</span>",
+      "css": ".ds-label { font-family: var(--font-mono, 'JetBrains Mono', monospace); font-size: 0.75rem; font-weight: 500; letter-spacing: 0.04em; text-transform: uppercase; color: var(--color-muted, oklch(0.46 0.022 250)); }"
+    }
+  ],
+  "narrative": {
+    "northStar": "The Swiss Brief",
+    "overview": "A law firm's credibility expressed through editorial typography and grid discipline — not through legal stock imagery or sales pressure. The implemented system borrows from Swiss institutional sites: structured, breathable, precise. Warmth arrives through proportion, readable copy, and restrained accent use, not through cream backgrounds or decorative clichés. Motion responds to interaction — hover, focus, and a single hero entrance feel considered, never choreographed for spectacle.",
+    "keyCharacteristics": [
+      "Restrained palette: cool institutional slate on pure white and cool-mist surfaces; accent ≤10% of any screen",
+      "Spectral display + Source Sans 3 body + JetBrains Mono labels — authority through typographic contrast",
+      "Flat-by-default surfaces; depth via Paper → Surface tonal steps and ruled dividers, not ghost-card shadows",
+      "Swiss grid discipline with generous editorial whitespace and fluid clamp() section rhythm",
+      "Mobile-first: sticky header, native details navigation and FAQ, WCAG AA contrast as a design constraint"
+    ],
+    "rules": [
+      {
+        "name": "The Restrained Rule",
+        "body": "Tinted cool neutrals carry the surface. Institutional Slate appears on ≤10% of any given screen — primary CTAs, links, focus rings, FAQ markers. Its rarity is the point.",
+        "section": "colors"
+      },
+      {
+        "name": "The No-Navy-Gold Rule",
+        "body": "If the palette reads as \"default law firm template,\" the slate has drifted too warm or too saturated. Pull back toward cool, desaturated institutional tones.",
+        "section": "colors"
+      },
+      {
+        "name": "The No-Cream Rule",
+        "body": "Body backgrounds must not land in the warm-neutral band (cream, sand, parchment, linen). Warmth is carried by typography and accent placement, not by a tinted page wash.",
+        "section": "colors"
+      },
+      {
+        "name": "The Display Ceiling Rule",
+        "body": "Hero type never exceeds 4.5rem at max clamp (well under the 6rem ceiling). Editorial restraint whispers.",
+        "section": "typography"
+      },
+      {
+        "name": "The Mono Sparingly Rule",
+        "body": "Monospace accents metadata and structure — not body paragraphs. One mono voice per screen section at most.",
+        "section": "typography"
+      },
+      {
+        "name": "The Flat-By-Default Rule",
+        "body": "Surfaces are flat at rest. Shadows appear only as a response to functional overlay state (dropdown), never as resting card decoration.",
+        "section": "elevation"
+      },
+      {
+        "name": "The No Ghost-Card Rule",
+        "body": "Never pair border: 1px solid with wide soft box-shadows (blur ≥16px). Pick one surface treatment: a defined border at Rule Line, or a tight functional shadow (≤8px blur), never both as decoration.",
+        "section": "elevation"
+      }
+    ],
+    "dos": [
+      "Do keep body text contrast at ≥4.5:1 against its background — Brief Ink on Paper, Registry Muted verified on both Paper and Cool Mist Surface.",
+      "Do use Institutional Slate sparingly: one primary CTA per zone, links, focus rings, FAQ markers.",
+      "Do let typography, ruled dividers, and whitespace establish hierarchy before reaching for containers or cards.",
+      "Do provide prefers-reduced-motion: reduce alternatives — hero entrance disabled, scroll-behavior auto.",
+      "Do test headline copy at every breakpoint — display clamp max is 4.5rem; reduce or rewrite if words overflow."
+    ],
+    "donts": [
+      "Don't use generic law-firm templates: stock gavels, scales of justice heroes, navy-and-gold palettes, rotating sliders.",
+      "Don't ship AI slop: cream/sand body backgrounds, gradient text, identical icon-card grids, eyebrow kickers on every section.",
+      "Don't use aggressive sales patterns: pop-ups, \"FREE CONSULTATION\" banners, fake urgency, lead capture before trust.",
+      "Don't build cold corporate walls: sterile stock photography, undifferentiated service copy blocks.",
+      "Don't use side-stripe borders, gradient text, or glassmorphism as default decoration.",
+      "Don't over-round containers (max 12px radius on panels and images); reserve full pills for tags and buttons only.",
+      "Don't pair 1px borders with wide soft drop shadows on the same element — the ghost-card tell."
+    ]
+  }
+}
