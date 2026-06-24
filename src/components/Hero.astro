@@ -4,25 +4,52 @@ import { firm, hero } from "../data/site";
 const metaText = `${firm.location} · Desde ${firm.founded}`;
 const headlineWords = hero.headline.split(/\s+/);
 const subheadLines = hero.subhead.split(/(?<=\.)\s+/);
-const heroImage = (width: number) => hero.image.src.replace(/w=\d+/, `w=${width}`);
-const imageSrc = heroImage(1200);
-const imageSrcset = [480, 800, 1200].map((w) => `${heroImage(w)} ${w}w`).join(", ");
+const heroImageUrl = (width: number, height: number) => {
+	const url = new URL(hero.image.src);
+	url.searchParams.set("w", String(width));
+	url.searchParams.set("h", String(height));
+	url.searchParams.set("fit", "crop");
+	return url.toString();
+};
+
+const srcsetFor = (widths: number[], aspect: number) =>
+	widths.map((w) => `${heroImageUrl(w, Math.round(w / aspect))} ${w}w`).join(", ");
+
+const mobileSrcset = srcsetFor([400, 600, 800], 5 / 4);
+const tabletSrcset = srcsetFor([640, 900, 1200], 3 / 2);
+const desktopSrcset = srcsetFor([800, 1000, 1200], 4 / 5);
 ---
 
 <section class="hero section" aria-labelledby="hero-heading" data-hero>
 	<div class="container hero__grid">
 		<figure class="hero__media">
 			<div class="hero__media-inner">
-				<img
-					src={imageSrc}
-					srcset={imageSrcset}
-					sizes="(min-width: 56rem) 42vw, 100vw"
-					alt={hero.image.alt}
-					width="1200"
-					height="1500"
-					fetchpriority="high"
-					decoding="async"
-				/>
+				<picture>
+					<source
+						media="(min-width: 56rem)"
+						srcset={desktopSrcset}
+						sizes="42vw"
+						width="1200"
+						height="1500"
+					/>
+					<source
+						media="(min-width: 40rem)"
+						srcset={tabletSrcset}
+						sizes="100vw"
+						width="1200"
+						height="800"
+					/>
+					<img
+						src={heroImageUrl(800, 640)}
+						srcset={mobileSrcset}
+						sizes="100vw"
+						alt={hero.image.alt}
+						width="800"
+						height="640"
+						fetchpriority="high"
+						decoding="async"
+					/>
+				</picture>
 			</div>
 		</figure>
 
@@ -98,12 +125,12 @@ const imageSrcset = [480, 800, 1200].map((w) => `${heroImage(w)} ${w}w`).join(",
 	}
 
 	.hero__media {
+		--hero-image-position: 50% 22%;
 		margin: 0;
 		order: 1;
 		overflow: hidden;
 		border-radius: var(--radius-lg);
-		aspect-ratio: 16 / 10;
-		max-height: clamp(11rem, 42vw, 18rem);
+		aspect-ratio: 5 / 4;
 	}
 
 	.hero__media-inner {
@@ -112,11 +139,16 @@ const imageSrcset = [480, 800, 1200].map((w) => `${heroImage(w)} ${w}w`).join(",
 		will-change: transform;
 	}
 
+	.hero__media-inner picture,
 	.hero__media-inner img {
+		display: block;
 		width: 100%;
 		height: 100%;
+	}
+
+	.hero__media-inner img {
 		object-fit: cover;
-		object-position: center 30%;
+		object-position: var(--hero-image-position);
 	}
 
 	.hero__content {
@@ -249,8 +281,18 @@ const imageSrcset = [480, 800, 1200].map((w) => `${heroImage(w)} ${w}w`).join(",
 
 	@media (min-width: 40rem) {
 		.hero__media {
+			--hero-image-position: 50% 28%;
 			aspect-ratio: 3 / 2;
-			max-height: clamp(14rem, 48vw, 22rem);
+			max-width: 38rem;
+			margin-inline: auto;
+		}
+	}
+
+	@media (min-width: 40rem) and (orientation: landscape) and (max-width: 55.99rem) {
+		.hero__media {
+			--hero-image-position: 50% 32%;
+			aspect-ratio: 16 / 9;
+			max-width: none;
 		}
 	}
 
@@ -262,8 +304,11 @@ const imageSrcset = [480, 800, 1200].map((w) => `${heroImage(w)} ${w}w`).join(",
 		}
 
 		.hero__media {
+			--hero-image-position: 50% 30%;
 			order: -1;
 			aspect-ratio: 4 / 5;
+			max-width: none;
+			margin-inline: 0;
 			max-height: 36rem;
 		}
 

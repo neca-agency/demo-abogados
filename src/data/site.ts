@@ -32,31 +32,31 @@ export const practiceAreas = [
 		index: "01",
 		title: "Derecho mercantil",
 		description:
-			"Constitución de sociedades, pactos entre socios, operaciones corporativas y gobierno interno con criterio preventivo.",
+			"Asesoramos en la constitución de sociedades, pactos entre socios, operaciones corporativas y gobierno interno. Nuestro enfoque es preventivo: anticipamos conflictos antes de que afecten al negocio. Trabajamos junto a fundadores y consejos de administración para que cada decisión tenga respaldo jurídico claro y ejecutable.",
 	},
 	{
 		index: "02",
 		title: "Derecho laboral",
 		description:
-			"Relaciones individuales y colectivas, despidos, restructuraciones y cumplimiento normativo para pymes y equipos directivos.",
+			"Asesoramos a empresas y directivos en todas las dimensiones de las relaciones de trabajo: contratación, gestión diaria, restructuraciones, negociación colectiva y litigio estratégico. Nuestro enfoque combina prevención, precisión técnica y una visión de negocio que minimiza riesgos y protege lo esencial — las personas y la organización.",
 	},
 	{
 		index: "03",
 		title: "Derecho civil y familia",
 		description:
-			"Herencias, contratos patrimoniales y situaciones familiares complejas, con un enfoque humano y técnicamente sólido.",
+			"Acompañamos en herencias, contratos patrimoniales y situaciones familiares que exigen calma y rigor a la vez. Explicamos las implicaciones de cada opción con claridad, sin dramatizar ni simplificar de más. El objetivo es que toméis decisiones informadas en momentos en los que la presión emocional y patrimonial suele ir de la mano.",
 	},
 	{
 		index: "04",
 		title: "Contencioso estratégico",
 		description:
-			"Litigio selectivo cuando la negociación no basta. Preparamos cada expediente como si fuera a juicio desde el primer día.",
+			"Litigamos de forma selectiva, cuando la negociación ya no ofrece una salida razonable. Preparamos cada expediente como si fuera a juicio desde el primer día: prueba, estrategia procesal y argumentación con mimo. Preferimos resolver antes de llegar al tribunal, pero cuando hay que litigar, lo hacemos con la preparación que el asunto merece.",
 	},
 	{
 		index: "05",
 		title: "Compliance y privacidad",
 		description:
-			"Adaptación al RGPD, políticas internas y respuesta ante incidencias, sin plantillas genéricas ni alarmismo innecesario.",
+			"Ayudamos a adaptar la organización al RGPD, diseñar políticas internas útiles y responder ante incidencias con criterio. Evitamos plantillas genéricas y el alarmismo innecesario: el cumplimiento debe servir al negocio, no paralizarlo. Cada protocolo se ajusta a cómo trabajáis de verdad, no a un manual estándar que nadie lee.",
 	},
 ] as const;
 
