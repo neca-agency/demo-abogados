@@ -1,43 +1,57 @@
 ---
-import { team } from "../data/site";
+import { team, teamSection } from "../data/site";
+
+const imageSrc = (src: string, width: number) => src.replace(/w=\d+/, `w=${width}`);
 ---
 
 <section id="equipo" class="section section--surface" aria-labelledby="equipo-heading">
 	<div class="container team">
-		<header class="team__intro">
-			<h2 id="equipo-heading">Equipo</h2>
-			<p class="prose team__lead">
-				Tres socios con responsabilidad directa sobre cada expediente.
-			</p>
+		<header class="team__header">
+			<div class="team__intro">
+				<h2 id="equipo-heading">{teamSection.title}</h2>
+				<p class="prose team__lead">{teamSection.lead}</p>
+			</div>
+
+			<aside class="team__aside" aria-label="Compromiso del equipo">
+				<hr class="team__rule" />
+				<p class="team__principle">{teamSection.principle}</p>
+			</aside>
 		</header>
 
-		<ul class="team__grid">
+		<ul class="team__roster">
 			{
-				team.map((member) => {
-					const roleParts = member.role.split(" · ");
-					const position = roleParts[0];
-					const specialty = roleParts.slice(1).join(" · ");
+				team.map((member, index) => {
+					const isLead = index === 0;
+					const maxWidth = isLead ? 960 : 800;
+					const src = imageSrc(member.image.src, maxWidth);
+					const widths = isLead ? [400, 640, 800, 960] : [320, 480, 640, 800];
+					const srcset = widths.map((w) => `${imageSrc(member.image.src, w)} ${w}w`).join(", ");
+					const sizes = isLead
+						? "(min-width: 56rem) 20rem, (min-width: 40rem) 11rem, 7.5rem"
+						: "(min-width: 56rem) 15rem, (min-width: 40rem) 9.5rem, 7rem";
 
 					return (
-						<li class="team__member">
+						<li class:list={["team__member", isLead && "team__member--lead"]}>
 							<figure class="team__media">
 								<img
-									src={member.image.src}
+									src={src}
+									srcset={srcset}
+									sizes={sizes}
 									alt={member.image.alt}
-									width="600"
-									height="450"
-									loading="lazy"
+									width={maxWidth}
+									height={Math.round(maxWidth * 1.25)}
+									loading={isLead ? "eager" : "lazy"}
 									decoding="async"
 								/>
 							</figure>
-							<div class="team__info">
+
+							<div class="team__body">
 								<div class="team__identity">
+									<p class="label-mono team__specialty">{member.specialty}</p>
 									<h3 class="team__name">{member.name}</h3>
-									<p class="team__role">
-										<span class="team__position">{position}</span>
-										{specialty ? <span class="team__specialty">{specialty}</span> : null}
-									</p>
+									<p class="team__role">{member.role}</p>
 								</div>
+								<p class="team__focus">{member.focus}</p>
 								<p class="team__credential">{member.credential}</p>
 							</div>
 						</li>
@@ -52,6 +66,12 @@ import { team } from "../data/site";
 	.team {
 		display: flex;
 		flex-direction: column;
+		gap: clamp(var(--space-2xl), 5vw, var(--space-3xl));
+	}
+
+	.team__header {
+		display: flex;
+		flex-direction: column;
 		gap: var(--space-2xl);
 	}
 
@@ -59,92 +79,148 @@ import { team } from "../data/site";
 		display: flex;
 		flex-direction: column;
 		gap: var(--space-md);
-		max-width: 32rem;
+		max-width: 34rem;
 	}
 
 	.team__lead {
+		font-size: clamp(1.0625rem, 0.5vw + 0.98rem, 1.1875rem);
+		line-height: 1.55;
 		color: var(--color-muted);
 	}
 
-	.team__grid {
+	.team__aside {
+		display: flex;
+		flex-direction: column;
+		gap: var(--space-lg);
+		max-width: 30rem;
+	}
+
+	.team__rule {
+		width: 3.5rem;
+		border: 0;
+		border-top: 2px solid var(--color-accent-soft);
+		margin: 0;
+	}
+
+	.team__principle {
+		font-family: var(--font-display);
+		font-size: clamp(1.5rem, 1.6vw + 0.85rem, 2.125rem);
+		font-style: italic;
+		font-weight: 400;
+		line-height: 1.28;
+		letter-spacing: -0.02em;
+		color: var(--color-ink);
+		text-wrap: balance;
+		max-width: 22ch;
+	}
+
+	.team__roster {
 		list-style: none;
 		margin: 0;
 		padding: 0;
-		display: grid;
-		gap: var(--space-2xl);
-		grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+		display: flex;
+		flex-direction: column;
+		border-top: 1px solid var(--color-border);
 	}
 
 	.team__member {
-		display: flex;
-		flex-direction: column;
+		--team-thumb: 7rem;
+
+		display: grid;
+		grid-template-columns: var(--team-thumb) minmax(0, 1fr);
+		gap: var(--space-xl);
+		padding-block: var(--space-xl);
+		border-bottom: 1px solid var(--color-border);
+		align-items: start;
+	}
+
+	.team__member--lead {
+		--team-thumb: 7.5rem;
+
+		padding-block: clamp(var(--space-2xl), 4vw, 3.25rem);
 	}
 
 	.team__media {
 		margin: 0;
 		border-radius: var(--radius-lg);
 		overflow: hidden;
-		aspect-ratio: 4 / 3;
+		aspect-ratio: 4 / 5;
 	}
 
 	.team__media img {
 		width: 100%;
 		height: 100%;
 		object-fit: cover;
-		object-position: center 20%;
+		object-position: center 15%;
+		transition: transform var(--duration-slow) var(--ease-out-expo);
 	}
 
-	.team__info {
+	.team__member:hover .team__media img,
+	.team__member:focus-within .team__media img {
+		transform: scale(1.035);
+	}
+
+	.team__body {
 		display: flex;
 		flex-direction: column;
 		gap: var(--space-md);
-		margin-top: var(--space-lg);
-		padding-top: var(--space-lg);
-		border-top: 1px solid var(--color-border);
+		min-width: 0;
+		padding-top: 0.25rem;
 	}
 
 	.team__identity {
 		display: flex;
 		flex-direction: column;
 		gap: var(--space-sm);
-		min-width: 0;
+	}
+
+	.team__specialty {
+		margin: 0;
+		font-size: 0.8125rem;
+		letter-spacing: 0.05em;
+		color: var(--color-primary);
 	}
 
 	.team__name {
-		font-size: var(--text-title);
+		font-size: clamp(1.375rem, 1.2vw + 0.95rem, 1.75rem);
 		font-weight: 500;
-		line-height: 1.15;
+		line-height: 1.12;
 		letter-spacing: var(--tracking-display);
 		text-wrap: balance;
-		font-kerning: normal;
-		font-optical-sizing: auto;
+	}
+
+	.team__member--lead .team__name {
+		font-size: clamp(1.625rem, 2vw + 0.85rem, 2.375rem);
+		font-weight: 500;
+		line-height: 1.08;
 	}
 
 	.team__role {
-		display: flex;
-		flex-wrap: wrap;
-		column-gap: 0.4em;
-		row-gap: 0.15em;
-		align-items: baseline;
 		font-size: var(--text-small);
-		line-height: 1.65;
-		max-width: 34ch;
-	}
-
-	.team__position {
 		font-weight: 600;
 		color: var(--color-ink);
 	}
 
-	.team__specialty {
-		color: var(--color-muted);
+	.team__member--lead .team__role {
+		font-size: clamp(0.9375rem, 0.3vw + 0.85rem, 1rem);
 	}
 
-	.team__specialty::before {
-		content: "·";
-		margin-inline-end: 0.4em;
-		color: var(--color-border);
+	.team__focus {
+		font-size: clamp(1.0625rem, 0.5vw + 0.95rem, 1.1875rem);
+		line-height: 1.5;
+		color: var(--color-ink);
+		max-width: 46ch;
+		text-wrap: pretty;
+	}
+
+	.team__member--lead .team__focus {
+		font-family: var(--font-display);
+		font-style: italic;
+		font-size: clamp(1.1875rem, 0.8vw + 0.95rem, 1.5rem);
 		font-weight: 400;
+		line-height: 1.4;
+		letter-spacing: -0.015em;
+		max-width: 38ch;
 	}
 
 	.team__credential {
@@ -154,9 +230,80 @@ import { team } from "../data/site";
 		line-height: 1.65;
 		letter-spacing: 0.01em;
 		color: var(--color-muted);
-		text-wrap: pretty;
-		max-width: 42ch;
-		font-kerning: normal;
+		max-width: 48ch;
 		font-variant-ligatures: none;
+	}
+
+	@media (min-width: 40rem) {
+		.team__member {
+			--team-thumb: 9.5rem;
+
+			gap: clamp(var(--space-xl), 4vw, var(--space-2xl));
+			padding-block: clamp(var(--space-xl), 3.5vw, var(--space-2xl));
+		}
+
+		.team__member--lead {
+			--team-thumb: 11rem;
+		}
+	}
+
+	@media (min-width: 56rem) {
+		.team__header {
+			display: grid;
+			grid-template-columns: minmax(0, 0.88fr) minmax(0, 1.12fr);
+			gap: clamp(2.5rem, 8vw, 6.5rem);
+			align-items: end;
+		}
+
+		.team__aside {
+			padding-bottom: 0.35rem;
+		}
+
+		.team__member {
+			--team-thumb: 15rem;
+
+			grid-template-columns: minmax(0, var(--team-thumb)) minmax(0, 1fr);
+			gap: clamp(2.5rem, 6vw, 5rem);
+			padding-block: clamp(var(--space-2xl), 4.5vw, 4rem);
+		}
+
+		.team__member--lead {
+			--team-thumb: clamp(17rem, 24vw, 21rem);
+
+			grid-template-columns: minmax(0, 0.46fr) minmax(0, 0.54fr);
+			gap: clamp(3rem, 7vw, 5.5rem);
+			padding-block: clamp(3.25rem, 6vw, 5rem);
+			background: var(--surface-primary);
+			margin-inline: calc(var(--page-padding) * -1);
+			padding-inline: var(--page-padding);
+			border-bottom-color: var(--border-primary);
+		}
+
+		.team__member:nth-child(even):not(.team__member--lead) {
+			grid-template-columns: minmax(0, 1fr) minmax(0, var(--team-thumb));
+		}
+
+		.team__member:nth-child(even):not(.team__member--lead) .team__media {
+			order: 2;
+		}
+
+		.team__member:nth-child(even):not(.team__member--lead) .team__body {
+			order: 1;
+		}
+
+		.team__member--lead .team__body {
+			padding-top: clamp(0.5rem, 2vw, 1.5rem);
+		}
+	}
+
+	@media (prefers-reduced-motion: reduce) {
+		.team__media img {
+			transition: none;
+		}
+
+		.team__member:hover .team__media img,
+		.team__member:focus-within .team__media img {
+			transform: none;
+		}
 	}
 </style>

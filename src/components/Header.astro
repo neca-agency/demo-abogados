@@ -35,7 +35,7 @@ import { firm, nav } from "../data/site";
 				<ol class="site-header__menu-list">
 					{
 						nav.map((item, i) => (
-							<li class="site-header__menu-item">
+							<li class="site-header__menu-item" style={`--i: ${i}`}>
 								<a class="site-header__menu-link" href={item.href}>
 									<span class="site-header__menu-index label-mono" aria-hidden="true">
 										{String(i + 1).padStart(2, "0")}
@@ -61,36 +61,112 @@ import { firm, nav } from "../data/site";
 <script>
 	const menu = document.querySelector<HTMLDetailsElement>(".site-header__menu");
 	const trigger = menu?.querySelector<HTMLElement>(".site-header__menu-trigger");
+	const summary = menu?.querySelector("summary");
+	const panel = menu?.querySelector<HTMLElement>(".site-header__menu-panel");
+	const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)");
 
-	const closeMenu = () => {
-		if (menu) menu.open = false;
-	};
+	let closeTimer: ReturnType<typeof setTimeout> | undefined;
+	let onPanelTransitionEnd: ((event: TransitionEvent) => void) | undefined;
 
 	const syncMenuState = () => {
-		document.body.classList.toggle("menu-open", Boolean(menu?.open));
+		const isActive = Boolean(menu?.open) && !menu?.classList.contains("is-closing");
+		const isClosing = menu?.classList.contains("is-closing") ?? false;
+		document.body.classList.toggle("menu-open", isActive || isClosing);
 		trigger?.setAttribute(
 			"aria-label",
-			menu?.open ? "Cerrar menú de navegación" : "Abrir menú de navegación",
+			isActive || isClosing ? "Cerrar menú de navegación" : "Abrir menú de navegación",
 		);
+		trigger?.setAttribute("aria-expanded", String(isActive));
 	};
 
-	menu?.addEventListener("toggle", syncMenuState);
+	const clearCloseListeners = () => {
+		clearTimeout(closeTimer);
+		if (panel && onPanelTransitionEnd) {
+			panel.removeEventListener("transitionend", onPanelTransitionEnd);
+			onPanelTransitionEnd = undefined;
+		}
+	};
+
+	const finishClose = () => {
+		if (!menu) return;
+		clearCloseListeners();
+		menu.open = false;
+		menu.classList.remove("is-closing");
+		syncMenuState();
+	};
+
+	const cancelClose = () => {
+		if (!menu?.classList.contains("is-closing")) return;
+		clearCloseListeners();
+		menu.classList.remove("is-closing");
+		syncMenuState();
+	};
+
+	const startClose = () => {
+		if (!menu?.open || menu.classList.contains("is-closing")) return;
+
+		if (reducedMotion.matches) {
+			finishClose();
+			return;
+		}
+
+		clearCloseListeners();
+		menu.classList.add("is-closing");
+		syncMenuState();
+
+		onPanelTransitionEnd = (event) => {
+			if (event.target !== panel || event.propertyName !== "clip-path") return;
+			finishClose();
+		};
+
+		panel?.addEventListener("transitionend", onPanelTransitionEnd);
+		closeTimer = window.setTimeout(finishClose, 550);
+	};
+
+	summary?.addEventListener("click", (event) => {
+		if (menu?.classList.contains("is-closing")) {
+			event.preventDefault();
+			cancelClose();
+			return;
+		}
+
+		if (menu?.open) {
+			event.preventDefault();
+			startClose();
+		}
+	});
+
+	menu?.addEventListener("toggle", () => {
+		if (menu?.open) {
+			menu.classList.remove("is-closing");
+			clearCloseListeners();
+		}
+		syncMenuState();
+	});
 
 	menu?.querySelectorAll("a").forEach((link) => {
-		link.addEventListener("click", closeMenu);
+		link.addEventListener("click", startClose);
 	});
 
 	document.addEventListener("keydown", (event) => {
-		if (event.key === "Escape" && menu?.open) {
-			event.preventDefault();
-			closeMenu();
+		if (event.key !== "Escape" || !menu?.open) return;
+		event.preventDefault();
+		if (menu.classList.contains("is-closing")) {
+			cancelClose();
+			return;
 		}
+		startClose();
 	});
 </script>
 
 <style>
 	.site-header-shell {
 		--header-bar-height: 4.25rem;
+		--menu-duration-enter: 420ms;
+		--menu-duration-exit: 300ms;
+		--menu-item-stagger-enter: 55ms;
+		--menu-item-stagger-exit: 45ms;
+		--menu-item-count: 4;
 		position: sticky;
 		top: 0;
 		z-index: var(--z-sticky);
@@ -237,16 +313,16 @@ import { firm, nav } from "../data/site";
 		top: 6px;
 	}
 
-	.site-header__menu[open] .site-header__menu-icon {
+	.site-header__menu[open]:not(.is-closing) .site-header__menu-icon {
 		background: transparent;
 	}
 
-	.site-header__menu[open] .site-header__menu-icon::before {
+	.site-header__menu[open]:not(.is-closing) .site-header__menu-icon::before {
 		top: 0;
 		transform: rotate(45deg);
 	}
 
-	.site-header__menu[open] .site-header__menu-icon::after {
+	.site-header__menu[open]:not(.is-closing) .site-header__menu-icon::after {
 		top: 0;
 		transform: rotate(-45deg);
 	}
@@ -267,16 +343,29 @@ import { firm, nav } from "../data/site";
 		background: var(--color-bg);
 		overflow-y: auto;
 		overscroll-behavior: contain;
-	}
-
-	.site-header__menu:not([open]) .site-header__menu-panel {
+		opacity: 0;
+		clip-path: inset(0 0 100% 0);
 		visibility: hidden;
 		pointer-events: none;
-		opacity: 0;
+		transition:
+			opacity var(--menu-duration-exit) var(--ease-out-expo),
+			clip-path var(--menu-duration-exit) var(--ease-out-expo),
+			visibility 0s linear var(--menu-duration-exit);
 	}
 
-	.site-header__menu[open] .site-header__menu-panel {
-		animation: menu-enter var(--duration-slow) var(--ease-out-expo) both;
+	.site-header__menu[open]:not(.is-closing) .site-header__menu-panel {
+		opacity: 1;
+		clip-path: inset(0 0 0 0);
+		visibility: visible;
+		pointer-events: auto;
+		transition:
+			opacity var(--menu-duration-enter) var(--ease-out-expo),
+			clip-path var(--menu-duration-enter) var(--ease-out-expo),
+			visibility 0s linear 0s;
+	}
+
+	.site-header__menu.is-closing .site-header__menu-panel {
+		pointer-events: none;
 	}
 
 	.site-header__menu-nav {
@@ -295,6 +384,14 @@ import { firm, nav } from "../data/site";
 
 	.site-header__menu-item {
 		border-bottom: 1px solid var(--color-border);
+		opacity: 0;
+		transform: translateY(1.25rem);
+		transition:
+			opacity calc(var(--menu-duration-exit) * 0.85) var(--ease-out-expo),
+			transform calc(var(--menu-duration-exit) * 0.85) var(--ease-out-expo);
+		transition-delay: calc(
+			(var(--menu-item-count) - 1 - var(--i, 0)) * var(--menu-item-stagger-exit)
+		);
 	}
 
 	.site-header__menu-item:first-child {
@@ -330,24 +427,13 @@ import { firm, nav } from "../data/site";
 		text-wrap: balance;
 	}
 
-	.site-header__menu[open] .site-header__menu-item {
-		animation: menu-item-enter var(--duration-slow) var(--ease-out-expo) both;
-	}
-
-	.site-header__menu[open] .site-header__menu-item:nth-child(1) {
-		animation-delay: 80ms;
-	}
-
-	.site-header__menu[open] .site-header__menu-item:nth-child(2) {
-		animation-delay: 140ms;
-	}
-
-	.site-header__menu[open] .site-header__menu-item:nth-child(3) {
-		animation-delay: 200ms;
-	}
-
-	.site-header__menu[open] .site-header__menu-item:nth-child(4) {
-		animation-delay: 260ms;
+	.site-header__menu[open]:not(.is-closing) .site-header__menu-item {
+		opacity: 1;
+		transform: translateY(0);
+		transition:
+			opacity var(--menu-duration-enter) var(--ease-out-expo),
+			transform var(--menu-duration-enter) var(--ease-out-expo);
+		transition-delay: calc(70ms + var(--i, 0) * var(--menu-item-stagger-enter));
 	}
 
 	.site-header__menu-footer {
@@ -356,6 +442,20 @@ import { firm, nav } from "../data/site";
 		gap: var(--space-md);
 		padding-top: var(--space-xl);
 		border-top: 1px solid var(--color-border);
+		opacity: 0;
+		transform: translateY(0.875rem);
+		transition:
+			opacity var(--menu-duration-exit) var(--ease-out-expo),
+			transform var(--menu-duration-exit) var(--ease-out-expo);
+	}
+
+	.site-header__menu[open]:not(.is-closing) .site-header__menu-footer {
+		opacity: 1;
+		transform: translateY(0);
+		transition:
+			opacity var(--menu-duration-enter) var(--ease-out-expo),
+			transform var(--menu-duration-enter) var(--ease-out-expo);
+		transition-delay: calc(70ms + var(--menu-item-count) * var(--menu-item-stagger-enter));
 	}
 
 	.site-header__menu-cta {
@@ -372,48 +472,31 @@ import { firm, nav } from "../data/site";
 		text-wrap: pretty;
 	}
 
-	@keyframes menu-enter {
-		from {
-			opacity: 0;
-			clip-path: inset(0 0 100% 0);
-		}
-
-		to {
-			opacity: 1;
-			clip-path: inset(0 0 0 0);
-		}
-	}
-
-	@keyframes menu-item-enter {
-		from {
-			opacity: 0;
-			transform: translateY(1.25rem);
-		}
-
-		to {
-			opacity: 1;
-			transform: translateY(0);
-		}
-	}
-
 	@media (prefers-reduced-motion: reduce) {
 		.site-header__menu-icon,
 		.site-header__menu-icon::before,
-		.site-header__menu-icon::after {
+		.site-header__menu-icon::after,
+		.site-header__menu-panel,
+		.site-header__menu-item,
+		.site-header__menu-footer {
 			transition: none;
-		}
-
-		.site-header__menu[open] .site-header__menu-panel,
-		.site-header__menu[open] .site-header__menu-item {
-			animation: none;
 		}
 
 		.site-header__menu:not([open]) .site-header__menu-panel {
 			opacity: 0;
+			visibility: hidden;
 		}
 
-		.site-header__menu[open] .site-header__menu-panel {
+		.site-header__menu[open]:not(.is-closing) .site-header__menu-panel {
 			opacity: 1;
+			clip-path: inset(0 0 0 0);
+			visibility: visible;
+		}
+
+		.site-header__menu[open]:not(.is-closing) .site-header__menu-item,
+		.site-header__menu[open]:not(.is-closing) .site-header__menu-footer {
+			opacity: 1;
+			transform: none;
 		}
 	}
 

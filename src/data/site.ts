@@ -70,31 +70,43 @@ export const philosophy = {
 		"Cada asunto comienza con una conversación honesta sobre objetivos, plazos y riesgos reales. Escuchamos con atención, analizamos cada detalle y comunicamos de forma directa para que siempre sepáis qué implica y qué podéis esperar.",
 } as const;
 
+export const teamSection = {
+	title: "Equipo",
+	lead: "Tres socios con responsabilidad directa sobre cada expediente.",
+	principle: "Cada asunto tiene un nombre detrás — no un departamento anónimo.",
+} as const;
+
 export const team = [
 	{
 		name: "Elena Alcántara",
-		role: "Socia directora · Mercantil",
+		role: "Socia directora",
+		specialty: "Mercantil",
+		focus: "Diseña operaciones y pactos antes de que se conviertan en conflicto.",
 		credential: "Colegiada ICAM · LL.M. Corporate Law, King's College London",
 		image: {
-			src: "https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?auto=format&fit=crop&w=600&q=80",
+			src: "https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?auto=format&fit=crop&w=800&q=80",
 			alt: "Elena Alcántara, socia directora del estudio",
 		},
 	},
 	{
 		name: "Javier Ortega",
-		role: "Socio · Laboral y contencioso",
+		role: "Socio",
+		specialty: "Laboral y contencioso",
+		focus: "Litiga con preparación de quien prefiere no llegar a juicio.",
 		credential: "Colegiado ICAM · Más de quince años en litigio laboral estratégico",
 		image: {
-			src: "https://images.unsplash.com/photo-1560250097-0b93528c311a?auto=format&fit=crop&w=600&q=80",
+			src: "https://images.unsplash.com/photo-1560250097-0b93528c311a?auto=format&fit=crop&w=800&q=80",
 			alt: "Javier Ortega, socio de laboral y contencioso",
 		},
 	},
 	{
 		name: "Lucía Méndez",
-		role: "Socia · Civil, familia y compliance",
+		role: "Socia",
+		specialty: "Civil, familia y compliance",
+		focus: "Acompaña decisiones patrimoniales y familiares con calma y precisión técnica.",
 		credential: "Colegiada ICAM · Especialista en mediación y planificación patrimonial",
 		image: {
-			src: "https://images.unsplash.com/photo-1580489944761-15a19d654956?auto=format&fit=crop&w=600&q=80",
+			src: "https://images.unsplash.com/photo-1580489944761-15a19d654956?auto=format&fit=crop&w=800&q=80",
 			alt: "Lucía Méndez, socia de civil, familia y compliance",
 		},
 	},
